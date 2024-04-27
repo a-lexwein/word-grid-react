@@ -1,27 +1,18 @@
 import './App.css';
+import { useEffect, useState } from 'react';
+import Grid from './components/Grid';
+import randomElement from '../helpers/randomElement';
+import bagOfLetters from '../helpers/bagOfLetters';
 
 function App() {
+  const [board] = useState(['a', 'b', 'c'])
   return (
     <div className="App">
       <header className="App-header">
-        <img src="Octocat.png" className="App-logo" alt="logo" />
-        <p>
-          GitHub Codespaces <span className="heart">♥️</span> React
-        </p>
-        <p className="small">
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </p>
+        {randomElement()}
+        <Grid board={board}></Grid>
       </header>
+      
     </div>
   );
 }
