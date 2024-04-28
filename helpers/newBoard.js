@@ -4,16 +4,22 @@ import bagOfLetters from './bagOfLetters';
 
 const random = seedrandom('seed');
 
-const randomSort = (a,b) => random() - .5; // chatgpt
-
-export default function randomElement() {
-    const bag = bagOfLetters(freqs, 'TWL 6 & 7 Uniques')
-    return bag.sort(randomSort)[0]
+const randomSort = (a,b) => random() - .5; // chatgpt for random sorting an array
 
 
-}
+export default function newBoard(freqs, selectFreqs, nRows, nCols, seed) {
+    const random = seedrandom(seed);
 
-export default function newBoard(freqs, selectFreqs) {
+    const randomSort = (a,b) => random() - .5; // chatgpt for random sorting an array
+
     const bag = bagOfLetters(freqs, selectFreqs)
-    return bag.sort(randomSort)[0]
+        .sort(randomSort)
+        .filter((x,i) => i <= nRows * nCols - 1)
+        .map((l,i) => ({
+            letter: l,
+            x: i % 4,
+            y: Math.floor(i/4.0)
+        }))
+
+    return bag
 }

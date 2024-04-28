@@ -6,13 +6,22 @@ import randomElement from '../helpers/randomElement';
 import bagOfLetters from '../helpers/bagOfLetters';
 
 function App() {
-  const [board] = useState(['a', 'b', 'c'])
+
+  const [options, setOptions] = useState(
+    {
+      nRows: 4,  
+      nCols: 4,
+      seed: 'seed',
+      freqs: 'TWL 8 - 10'
+    }
+  );
+
+
   return (
     <div className="App">
       <header className="App-header">
-        <Options/>
-        {randomElement()}
-        <Grid board={board}/>
+        <Options options={options} setOptions={setOptions}/>
+        <Grid options={options}/>
       </header>
       
     </div>
