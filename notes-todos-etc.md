@@ -10,6 +10,6 @@ history of guesses
 
 ---
 
-handleSubmit = (options, new_options) {
+add css for tiles
 
-}
+board -

@@ -42,7 +42,7 @@ export default function Options( { options, setOptions }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="options" onSubmit={handleSubmit}>
     <label htmlFor="options">Freqs:</label>
         <select id="options" value={selectFreqsValue} onChange={handleFreqsChange}>
             {names.map(x => <option value={x}>{x}</option>)}

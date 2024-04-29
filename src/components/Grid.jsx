@@ -15,7 +15,6 @@ export default function Grid( { options }) {
           gameGrid.style.gridTemplateColumns = `repeat(${options.nCols}, 1fr)`; 
         }
       }, [options]); // Run this effect only once after the component mounts
-    console.log(options)
 
     return <div className="game-grid">
     {

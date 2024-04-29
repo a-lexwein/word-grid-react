@@ -19,12 +19,14 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="sidebar">
         <Options options={options} setOptions={setOptions}/>
+      </div>
+      <div className="grid-container">
         <Grid options={options}/>
-      </header>
-      
+      </div>
     </div>
+    
   );
 }
 
