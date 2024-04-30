@@ -2,8 +2,6 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import Grid from './components/Grid';
 import Options from './components/Options';
-import randomElement from '../helpers/randomElement';
-import bagOfLetters from '../helpers/bagOfLetters';
 
 function App() {
 
@@ -15,7 +13,6 @@ function App() {
       freqs: 'TWL 8 - 10'
     }
   );
-
 
   return (
     <div className="App">

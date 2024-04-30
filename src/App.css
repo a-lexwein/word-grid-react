@@ -1,32 +1,30 @@
 .App {
   display: flex;
-  justify-content: center; /* Horizontally center children */
-  align-items: center; /* Vertically center children */
-  height: 100vh; /* Make the container fill the entire viewport height */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.sidebar {
-  width: 200px; /* Set width of the sidebar */
-  background-color: #f0f0f0; /* Example background color */
-  padding: 20px; /* Add some padding for spacing */
+.sidebar { /* https://blog.hubspot.com/website/css-sidebar */
+  height: 100%;
+  width: 12%;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+  background-color: #e5c348;
 }
 
-/* Center content inside the sidebar */
-.sidebar-content {
-}
-
-/* Grid container styles */
 .grid-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 120px);
   gap: 0px;
-  width: 100px;
   touch-action: none;
 }
 
@@ -43,5 +41,6 @@
 }
 
 .options {
-
+  display: flex;
+  flex-direction: column;
 }
