@@ -10,6 +10,10 @@ history of guesses
 
 ---
 
-add css for tiles
-
-board -
+1. scale grid size by viewport
+1. add title
+1. add about page
+1. change options to expand
+1. come up with better url
+1. add prevent sleep
+1. clean-up readme
