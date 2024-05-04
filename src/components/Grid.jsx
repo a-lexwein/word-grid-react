@@ -4,7 +4,7 @@ import Tile from './Tile';
 import newBoard from '../../helpers/newBoard';
 import freqs from '../../data/freqs.json';
 
-export default function Grid( { options }) {
+export default function Grid({ options }) {
     useEffect(() => {
         // Via GPT
         // Select the element with the class 'game-grid' using a ref
