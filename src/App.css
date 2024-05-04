@@ -32,10 +32,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;
-  width: 100px;
+  max-height: 100px; /* Maximum pixel size for height */
+  max-width: 100px; /* Maximum pixel size for width */
+  height: 10vw;
+  width: 10vw;
   font-family: sans-serif;
-  font-size: 80px;
+  font-size: calc(8vw + 2px); /* Set the font-size relative to the viewport width with an additional 2px */
+  font-size: min(calc(8vw + 2px), 80px); /* Limit font-size to a maximum of 40px */
   border-style: solid;
   position: relative;
 }
