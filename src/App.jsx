@@ -1,15 +1,18 @@
-import './App.css';
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, useParams} from 'react-router-dom'
+import './App.css';
+
+
 import Grid from './components/Grid';
 import Options from './components/Options';
 
-function App() {
-
+function Main() {
+  const { seed } = useParams();
   const [options, setOptions] = useState(
     {
       nRows: 4,  
       nCols: 4,
-      seed: 'seed',
+      seed: seed ?? 'seed',
       freqs: 'TWL 8 - 10'
     }
   );
@@ -25,6 +28,20 @@ function App() {
     </div>
     
   );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+      <Route path="/" element={<Main />} />
+      <Route
+        path="/:seed"
+        element={<Main />}
+      />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App;
