@@ -1,5 +1,4 @@
 import seedrandom from 'seedrandom';
-import freqs from '../data/freqs.json';
 import bagOfLetters from './bagOfLetters';
 
 

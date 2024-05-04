@@ -6,18 +6,22 @@ import './App.css';
 import Grid from './components/Grid';
 import Options from './components/Options';
 
+import names from '../data/freqs-name.json';
+
 function Main() {
-  const { size, seed } = useParams();
+  const { size, freqIndex, seed } = useParams();
+
+  
 
 
   
 
   const [options, setOptions] = useState(
     {
-      nRows:  size.split('x')[0] ?? 4,  
-      nCols: size.split('x')[1] ?? 4,
+      nRows: size ? size.split('x')[0] : 4,  
+      nCols: size ? size.split('x')[1] : 4,
       seed: seed ?? 'hello',
-      freqs: 'TWL 8 - 10'
+      freqs: freqIndex ? names[freqIndex] : 'TWL 8 - 10'
     }
   );
 
@@ -43,7 +47,7 @@ function App() {
       <Routes>
       <Route path="/" element={<Main />} />
       <Route
-        path="/:size/:seed"
+        path="/:size/:freqIndex/:seed"
         element={<Main />}
       />
       </Routes>

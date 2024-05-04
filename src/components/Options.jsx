@@ -38,18 +38,14 @@ export default function Options( { options, setOptions}) {
     });
 
 
-    navigate(`/${nRowsValue}x${nColsValue}/${seedValue}`);
+    navigate(`/${nRowsValue}x${nColsValue}/${names.indexOf(selectFreqsValue)}/${seedValue}`);
 
 
   };
 
   return (
     <form className="options" onSubmit={handleSubmit}>
-    <label htmlFor="options">Freqs:</label>
-        <select id="options" value={selectFreqsValue} onChange={handleFreqsChange}>
-            {names.map(x => <option value={x}>{x}</option>)}
 
-        </select>
       <label htmlFor="nRows">{nRowsValue} rows</label>
       <input
         type="range"
@@ -73,6 +69,12 @@ export default function Options( { options, setOptions}) {
         value={nColsValue}
         onChange={handleColsChange}
       />
+
+      <label htmlFor="options">Freqs:</label>
+        <select id="options" value={selectFreqsValue} onChange={handleFreqsChange}>
+            {names.map(x => <option value={x}>{x}</option>)}
+
+        </select>
 
       <label htmlFor="seed">seed</label>
       <input
