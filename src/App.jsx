@@ -8,11 +8,12 @@ import Options from './components/Options';
 
 function Main() {
   const { seed } = useParams();
+  const [url, setUrl] = useState(seed);
   const [options, setOptions] = useState(
     {
       nRows: 4,  
       nCols: 4,
-      seed: seed ?? 'seed',
+      seed: seed ?? 'hello',
       freqs: 'TWL 8 - 10'
     }
   );
@@ -20,7 +21,12 @@ function Main() {
   return (
     <div className="App">
       <div className="sidebar">
-        <Options options={options} setOptions={setOptions}/>
+        <Options
+          options={options}
+          setOptions={setOptions}
+          url={url}
+          updateUrl={setUrl}
+        />
       </div>
       <div className="grid-container">
         <Grid options={options}/>

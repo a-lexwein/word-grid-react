@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import names from '../../data/freqs-name.json';
 
-export default function Options( { options, setOptions }) {
+export default function Options( { options, setOptions, url, updateUrl }) {
     // this started as GPT asking for a form with 2 range sliders
   const [nRowsValue, setNRows] = useState(options.nRows);
   const [nColsValue, setNCols] = useState(options.nCols);
   const [selectFreqsValue, setSelectFreqsValue] = useState(options.freqs)
   const [seedValue, setSeedValue] = useState(options.seed)
+
+  const navigate = useNavigate();
 
   const handleRowsChange = (e) => {
     setNRows(parseInt(e.target.value));
@@ -26,10 +29,6 @@ export default function Options( { options, setOptions }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Do something with the slider values, like sending them to an API or processing them
-    console.log("Slider 1 value:", nRowsValue);
-    console.log("Slider 2 value:", nColsValue);
-    console.log("Freq", selectFreqsValue);
 
     setOptions({
       nRows: nRowsValue,
@@ -37,6 +36,9 @@ export default function Options( { options, setOptions }) {
       freqs: selectFreqsValue,
       seed: seedValue,
     });
+
+
+    navigate(`/${seedValue}`);
 
 
   };
