@@ -7,12 +7,15 @@ import Grid from './components/Grid';
 import Options from './components/Options';
 
 function Main() {
-  const { seed } = useParams();
-  const [url, setUrl] = useState(seed);
+  const { size, seed } = useParams();
+
+
+  
+
   const [options, setOptions] = useState(
     {
-      nRows: 4,  
-      nCols: 4,
+      nRows:  size.split('x')[0] ?? 4,  
+      nCols: size.split('x')[1] ?? 4,
       seed: seed ?? 'hello',
       freqs: 'TWL 8 - 10'
     }
@@ -24,8 +27,6 @@ function Main() {
         <Options
           options={options}
           setOptions={setOptions}
-          url={url}
-          updateUrl={setUrl}
         />
       </div>
       <div className="grid-container">
@@ -42,7 +43,7 @@ function App() {
       <Routes>
       <Route path="/" element={<Main />} />
       <Route
-        path="/:seed"
+        path="/:size/:seed"
         element={<Main />}
       />
       </Routes>

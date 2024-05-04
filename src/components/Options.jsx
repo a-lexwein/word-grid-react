@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import names from '../../data/freqs-name.json';
 
-export default function Options( { options, setOptions, url, updateUrl }) {
+export default function Options( { options, setOptions}) {
     // this started as GPT asking for a form with 2 range sliders
   const [nRowsValue, setNRows] = useState(options.nRows);
   const [nColsValue, setNCols] = useState(options.nCols);
@@ -38,7 +38,7 @@ export default function Options( { options, setOptions, url, updateUrl }) {
     });
 
 
-    navigate(`/${seedValue}`);
+    navigate(`/${nRowsValue}x${nColsValue}/${seedValue}`);
 
 
   };
@@ -48,8 +48,7 @@ export default function Options( { options, setOptions, url, updateUrl }) {
     <label htmlFor="options">Freqs:</label>
         <select id="options" value={selectFreqsValue} onChange={handleFreqsChange}>
             {names.map(x => <option value={x}>{x}</option>)}
-            
-            
+
         </select>
       <label htmlFor="nRows">{nRowsValue} rows</label>
       <input
@@ -74,6 +73,7 @@ export default function Options( { options, setOptions, url, updateUrl }) {
         value={nColsValue}
         onChange={handleColsChange}
       />
+
       <label htmlFor="seed">seed</label>
       <input
         type="text"
@@ -85,6 +85,7 @@ export default function Options( { options, setOptions, url, updateUrl }) {
 
       <button type="submit">New Board</button>
     </form>
+
   );
 }
 
