@@ -11,8 +11,7 @@ import names from '../data/freqs-name.json';
 function Main() {
   const { size, freqIndex, seed } = useParams();
 
-  
-
+  const [currentGuess, setGuess] = useState('');
 
   
 
@@ -34,7 +33,12 @@ function Main() {
         />
       </div>
       <div className="grid-container">
-        <Grid options={options}/>
+        {/* {currentGuess} */}
+        <Grid
+          options={options}
+          currentGuess={currentGuess}
+          setGuess={setGuess}
+        />
       </div>
     </div>
     

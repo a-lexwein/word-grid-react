@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import names from '../../data/freqs-name.json';
 
-export default function Options( { options, setOptions}) {
+export default function Options( { options, setOptions }) {
     // this started as GPT asking for a form with 2 range sliders
   const [nRowsValue, setNRows] = useState(options.nRows);
   const [nColsValue, setNCols] = useState(options.nCols);
