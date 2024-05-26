@@ -2,18 +2,14 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useParams} from 'react-router-dom'
 import './App.css';
 
-
 import Grid from './components/Grid';
 import Options from './components/Options';
-
 import names from '../data/freqs-name.json';
 
 function Main() {
   const { size, freqIndex, seed } = useParams();
 
   const [currentGuess, setGuess] = useState('');
-
-  
 
   const [options, setOptions] = useState(
     {
@@ -33,12 +29,12 @@ function Main() {
         />
       </div>
       <div className="grid-container">
-        {/* {currentGuess} */}
         <Grid
           options={options}
           currentGuess={currentGuess}
           setGuess={setGuess}
         />
+        <div className="current-guess">{currentGuess}</div>
       </div>
     </div>
     

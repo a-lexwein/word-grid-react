@@ -23,4 +23,7 @@ history of guesses
     1. first attempt failed
 1. clean-up readme
 
-1. add touch
+1. add touch x
+1. add submit/reset: start with tap
+1. add scoreboard
+1. add scoring

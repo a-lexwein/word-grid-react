@@ -15,9 +15,11 @@
 }
 
 .grid-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr; /* single column */
+  grid-auto-rows: min-content; /* auto rows based on content size */
+  justify-items: center; /* center items horizontally */
+  align-items: start; /* start items vertically */
   width: 100%;
 }
 
@@ -66,4 +68,7 @@
 .options {
   display: flex;
   flex-direction: column;
+}
+
+.current-guess {
 }
