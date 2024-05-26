@@ -4,6 +4,7 @@ import bagOfLetters from './bagOfLetters';
 
 export default function newBoard(freqs, selectFreqs, nRows, nCols, seed) {
     const random = seedrandom(seed + nRows + nCols);
+    // const random = seedrandom(seed);
     // const randomSort = (a,b) => Math.random() - .5; // chatgpt for random sorting an array
 
     
