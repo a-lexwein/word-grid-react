@@ -27,3 +27,7 @@ history of guesses
 1. add submit/reset: start with tap
 1. add scoreboard
 1. add scoring
+
+---
+
+define submit at top. Pass downscel

@@ -44,7 +44,7 @@
   font-family: sans-serif;
   font-size: calc(8vw + 2px);
   font-size: min(calc(8vw + 2px), 80px);
-  border-style: solid;
+  box-shadow: 0 0 0 3px;
   position: relative;
 }
 
@@ -71,4 +71,6 @@
 }
 
 .current-guess {
+  height: calc(5vw);
+  font-size: calc(4vw);
 }

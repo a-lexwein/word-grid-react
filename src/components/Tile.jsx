@@ -18,7 +18,7 @@ export default function Tile({ letter, id, handleClick, data, currentGuess }) {
       style={{ backgroundColor: backgroundColor }}
       onPointerDown={handleClick}
     >
-      <div class="tileText">{letter}</div>
+      <div className="tileText">{letter}</div>
       <div
           className="hitbox"
           onPointerDown={handleClick}
