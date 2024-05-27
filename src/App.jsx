@@ -4,7 +4,9 @@ import './App.css';
 
 import Grid from './components/Grid';
 import Options from './components/Options';
+import History from './components/History';
 import names from '../data/freqs-name.json';
+import wordInList from '../helpers/wordInList';
 
 function Main() {
   const { size, freqIndex, seed } = useParams();
@@ -14,10 +16,15 @@ function Main() {
 
   const submitWord = () => {
     setWordSubmitted(true);  // Signal the word submission event
-    updateHistory([...history, currentGuess])
+    let submission = {
+      word: currentGuess,
+      valid: wordInList(currentGuess),
+      score: wordInList(currentGuess) ? 1 : 0,
+    }
+    updateHistory([...history, submission])
+
     setGuess('');  // Clear the current guess
 
-    console.log(history)
   };
 
   const [options, setOptions] = useState({
@@ -36,6 +43,7 @@ function Main() {
         />
       </div>
       <div className="grid-container">
+        <History history={history}></History>
         <Grid
           options={options}
           currentGuess={currentGuess}
