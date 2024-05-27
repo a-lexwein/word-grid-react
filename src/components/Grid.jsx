@@ -52,7 +52,6 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
     if (tile.clickable === false) {
           // Check if lastTile is defined before accessing its id property
       if (lastTile && tile.id === lastTile.id) {
-        console.log('Double tap detected, submitting word');
         submitWord();
     }
       return;
