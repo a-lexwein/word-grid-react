@@ -7,6 +7,7 @@ import Options from './components/Options';
 import History from './components/History';
 import names from '../data/freqs-name.json';
 import wordInList from '../helpers/wordInList';
+import score from '../helpers/score';
 
 function Main() {
   const { size, freqIndex, seed } = useParams();
@@ -19,7 +20,7 @@ function Main() {
     let submission = {
       word: currentGuess,
       valid: wordInList(currentGuess),
-      score: wordInList(currentGuess) ? 1 : 0,
+      score: wordInList(currentGuess) ? score(currentGuess) : 0,
     }
     updateHistory([...history, submission])
 
@@ -33,13 +34,18 @@ function Main() {
     seed: seed ?? 'hello',
     freqs: freqIndex ? names[freqIndex] : 'TWL 8 - 10'
   });
+  
+  const handleSetOptions = (newOptions) => {
+    setOptions(newOptions);
+    updateHistory([]);  // Reset the history
+  };
 
   return (
     <div className="App">
       <div className="sidebar">
         <Options
           options={options}
-          setOptions={setOptions}
+          setOptions={handleSetOptions}
         />
       </div>
       <div className="grid-container">
@@ -48,8 +54,8 @@ function Main() {
           options={options}
           currentGuess={currentGuess}
           setGuess={setGuess}
-          wordSubmitted={wordSubmitted}  // Pass the state variable to Grid
-          setWordSubmitted={setWordSubmitted}  // Pass the state setter to Grid
+          wordSubmitted={wordSubmitted}
+          setWordSubmitted={setWordSubmitted}
           submitWord={submitWord}
         />
         <div

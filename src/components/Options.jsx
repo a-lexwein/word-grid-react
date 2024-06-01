@@ -45,6 +45,7 @@ export default function Options( { options, setOptions }) {
 
   return (
     <form className="options" onSubmit={handleSubmit}>
+      <button type="submit">New Board</button>
 
       <label htmlFor="nRows">{nRowsValue} rows</label>
       <input
@@ -85,7 +86,7 @@ export default function Options( { options, setOptions }) {
         onChange={handleSeedChange}
       />
 
-      <button type="submit">New Board</button>
+      
     </form>
 
   );
