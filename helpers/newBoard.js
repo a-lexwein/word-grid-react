@@ -2,6 +2,7 @@ import seedrandom from 'seedrandom';
 import bagOfLetters from './bagOfLetters';
 
 const neighbors = (tile, board) => board.filter(x => (Math.abs(tile.x - x.x) <= 1 && Math.abs(tile.y - x.y) <= 1));
+const isVowel = x => ['A','E','I','O', 'U'].includes(x.toUpperCase());
 
 const hasING = (board) => board
     .filter(x => x.letter === "N")
@@ -34,13 +35,21 @@ function newBoardNoMods(freqs, selectFreqs, nRows, nCols, random) {
 }
 
 export default function newBoard(freqs, selectFreqs, nRows, nCols, seed, mods) {
+    let modsInternal = mods ?? []
     const random = seedrandom(seed + nRows + nCols);
+    const randomElement = (bag) => bag[Math.floor(random() * bag.length)]
     // const random = seedrandom(seed);
     // const randomSort = (a,b) => Math.random() - .5; // chatgpt for random sorting an array
     let board = newBoardNoMods(freqs, selectFreqs, nRows, nCols, random)
     
-    while (mods.includes('no_ings') && hasING(board)) {
+    while (modsInternal.includes('no_ings') && hasING(board)) {
       board = newBoardNoMods(freqs, selectFreqs, nRows, nCols, random)
+    }
+    if (modsInternal.includes('cvc_checkerboard')) {
+      for (const tile of board) {
+        while(isVowel(tile.letter) && (tile.x + tile.y) % 2 === 0) tile.letter  = randomElement(bagOfLetters(freqs, selectFreqs))
+        while(!isVowel(tile.letter) && (tile.x + tile.y) % 2 === 1) tile.letter  = randomElement(bagOfLetters(freqs, selectFreqs))
+      }
     }
     return board
 }

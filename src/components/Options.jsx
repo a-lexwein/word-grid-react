@@ -50,7 +50,6 @@ export default function Options({ options, setOptions }) {
     });
 
     navigate(`/${nRowsValue}x${nColsValue}/${names.indexOf(selectFreqsValue)}/${seedValue}`);
-    console.log(mods)
   };
 
   return (
