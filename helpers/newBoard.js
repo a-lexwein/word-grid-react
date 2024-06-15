@@ -20,8 +20,8 @@ function newBoardNoMods(freqs, selectFreqs, nRows, nCols, random) {
       let letter = randomElement(bag)
       let row = {
         letter: letter,
-        y:i,
-        x:j,
+        y:j,
+        x:i,
         clicked: false,
         clickable: letter === "_" ? false : true,
         selected_order: 0, //needed 0 in observable version but not sure I'll still need
@@ -59,7 +59,7 @@ export default function newBoard(freqs, selectFreqs, nRows, nCols, seed, mods) {
       // find middle column and set to y
       let midRow = Math.floor(nRows/2)
 
-      let midCol = Math.floor(nCols/2)
+      let midCol = Math.floor((nCols)/2)
       for (const tile of board) {
         if (tile.x === midRow) tile.letter = 'X'
         if (tile.y === midCol) tile.letter = 'Y'
