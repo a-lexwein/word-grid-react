@@ -31,4 +31,13 @@ history of guesses
 ---
 
 Add 3 jokers
-Add scrabble style scores to tiles.
+Add scrabble style scores to tiles. x
+
+
+this guy causes errors when I try to spell savior/savoir in bottom right
+https://orange-space-waffle-gx6v69pqvg53q76-3000.app.github.dev/9x7/18/hello
+
+https://orange-space-waffle-gx6v69pqvg53q76-3000.app.github.dev/4x5/12/hello
+another one (when cartesian is selected, x is in wrong place)
+
+Fixed

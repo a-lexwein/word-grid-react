@@ -98,6 +98,7 @@ export default function Options({ options, setOptions }) {
 
       <fieldset>
         <legend>Mods</legend>
+
         <div>
           <input
             type="checkbox"
@@ -107,6 +108,7 @@ export default function Options({ options, setOptions }) {
           />
           <label htmlFor="no_ings">No INGs</label>
         </div>
+
         <div>
           <input
             type="checkbox"
@@ -116,6 +118,17 @@ export default function Options({ options, setOptions }) {
           />
           <label htmlFor="cvc_checkerboard">CVC Checkerboard</label>
         </div>
+
+        <div>
+          <input
+            type="checkbox"
+            id="cartesian"
+            name="cartesian"
+            onChange={handleModChange}
+          />
+          <label htmlFor="cvc_checkerboard">Cartesian</label>
+        </div>
+
       </fieldset>
     </form>
   );

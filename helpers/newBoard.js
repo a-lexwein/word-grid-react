@@ -15,8 +15,8 @@ function newBoardNoMods(freqs, selectFreqs, nRows, nCols, random) {
   const randomElement = (bag) => bag[Math.floor(random() * bag.length)]
 
   let out = []
-  for (let i = 0; i < nCols; ++i) {
-    for (let j = 0; j < nRows; ++j) {
+  for (let i = 0; i < nRows; ++i) {
+    for (let j = 0; j < nCols; ++j) {
       let letter = randomElement(bag)
       let row = {
         letter: letter,
@@ -50,6 +50,21 @@ export default function newBoard(freqs, selectFreqs, nRows, nCols, seed, mods) {
         while(isVowel(tile.letter) && (tile.x + tile.y) % 2 === 0) tile.letter  = randomElement(bagOfLetters(freqs, selectFreqs))
         while(!isVowel(tile.letter) && (tile.x + tile.y) % 2 === 1) tile.letter  = randomElement(bagOfLetters(freqs, selectFreqs))
       }
+
+    
+    }
+
+    if (modsInternal.includes('cartesian')) {
+      // find middle row  set to x
+      // find middle column and set to y
+      let midRow = Math.floor(nRows/2)
+
+      let midCol = Math.floor(nCols/2)
+      for (const tile of board) {
+        if (tile.x === midRow) tile.letter = 'X'
+        if (tile.y === midCol) tile.letter = 'Y'
+      }
+      
     }
     return board
 }
