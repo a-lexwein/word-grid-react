@@ -10,7 +10,7 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
 
   useEffect(() => {
     // Recompute the board when options change
-    const newBoardData = newBoard(freqs, options.freqs, options.nRows, options.nCols, options.seed);
+    const newBoardData = newBoard(freqs, options.freqs, options.nRows, options.nCols, options.seed, options.mods);
     setBoard(newBoardData);
     updateBoard(newBoardData);
   }, [options]);
@@ -26,7 +26,7 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
   useEffect(() => {
     if (wordSubmitted) {
       // Handle the event triggered by submitWord
-      const newBoardData = newBoard(freqs, options.freqs, options.nRows, options.nCols, options.seed);
+      const newBoardData = newBoard(freqs, options.freqs, options.nRows, options.nCols, options.seed, options.mods);
       updateBoard(newBoardData);
       setWordSubmitted(false);  // Reset the wordSubmitted flag
     }
@@ -79,7 +79,6 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
           <Tile
             key={i}
             id={i}
-            letter={x.letter}
             handleClick={() => handleClick(i)}
             data={data}
             currentGuess={currentGuess}

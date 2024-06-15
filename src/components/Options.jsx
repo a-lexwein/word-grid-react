@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import names from '../../data/freqs-name.json';
 
-export default function Options( { options, setOptions }) {
-    // this started as GPT asking for a form with 2 range sliders
+export default function Options({ options, setOptions }) {
   const [nRowsValue, setNRows] = useState(options.nRows);
   const [nColsValue, setNCols] = useState(options.nCols);
-  const [selectFreqsValue, setSelectFreqsValue] = useState(options.freqs)
-  const [seedValue, setSeedValue] = useState(options.seed)
+  const [selectFreqsValue, setSelectFreqsValue] = useState(options.freqs);
+  const [seedValue, setSeedValue] = useState(options.seed);
+  const [mods, setMods] = useState(options.mods);
 
   const navigate = useNavigate();
 
@@ -27,6 +27,17 @@ export default function Options( { options, setOptions }) {
     setSeedValue(e.target.value);
   };
 
+  const handleModChange = (e) => {
+    const { name, checked } = e.target;
+    setMods((prevMods) => {
+      if (checked) {
+        return [...prevMods, name];
+      } else {
+        return prevMods.filter((mod) => mod !== name);
+      }
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -35,12 +46,11 @@ export default function Options( { options, setOptions }) {
       nCols: nColsValue,
       freqs: selectFreqsValue,
       seed: seedValue,
+      mods: mods,
     });
 
-
     navigate(`/${nRowsValue}x${nColsValue}/${names.indexOf(selectFreqsValue)}/${seedValue}`);
-
-
+    console.log(mods)
   };
 
   return (
@@ -72,12 +82,13 @@ export default function Options( { options, setOptions }) {
       />
 
       <label htmlFor="options">Freqs:</label>
-        <select id="options" value={selectFreqsValue} onChange={handleFreqsChange}>
-            {names.map(x => <option value={x}>{x}</option>)}
+      <select id="options" value={selectFreqsValue} onChange={handleFreqsChange}>
+        {names.map((x, index) => (
+          <option key={index} value={x}>{x}</option>
+        ))}
+      </select>
 
-        </select>
-
-      <label htmlFor="seed">seed</label>
+      <label htmlFor="seed">Seed</label>
       <input
         type="text"
         id="seed"
@@ -86,9 +97,27 @@ export default function Options( { options, setOptions }) {
         onChange={handleSeedChange}
       />
 
-      
+      <fieldset>
+        <legend>Mods</legend>
+        <div>
+          <input
+            type="checkbox"
+            id="no_ings"
+            name="no_ings"
+            onChange={handleModChange}
+          />
+          <label htmlFor="no_ings">No INGs</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="cvc_checkerboard"
+            name="cvc_checkerboard"
+            onChange={handleModChange}
+          />
+          <label htmlFor="cvc_checkerboard">CVC Checkerboard</label>
+        </div>
+      </fieldset>
     </form>
-
   );
 }
-

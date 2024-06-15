@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Tile({ letter, id, handleClick, data, currentGuess }) {
+export default function Tile({ id, handleClick, data, currentGuess }) {
   let tile = data.filter(x=> x.id === id)[0]
   let max_selected = Math.max(...data.map(x=> x.selected_order)) || 0
 
@@ -18,7 +18,8 @@ export default function Tile({ letter, id, handleClick, data, currentGuess }) {
       style={{ backgroundColor: backgroundColor }}
       onPointerDown={handleClick}
     >
-      <div className="tileText">{letter}</div>
+      <div className="tile-text">{tile.letter}</div>
+      <div className="tile-points">{tile.point_value}</div>
       <div
           className="hitbox"
           onPointerDown={handleClick}

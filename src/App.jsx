@@ -32,7 +32,8 @@ function Main() {
     nRows: size ? size.split('x')[0] : 4,
     nCols: size ? size.split('x')[1] : 4,
     seed: seed ?? 'hello',
-    freqs: freqIndex ? names[freqIndex] : 'TWL 8 - 10'
+    freqs: freqIndex ? names[freqIndex] : 'TWL 8 - 10',
+    mods: [],
   });
   
   const handleSetOptions = (newOptions) => {

@@ -17,7 +17,7 @@ history of guesses
 1. change options to expand
 1. come up with better url
     1. alex-bogg
-    1. alexs-word-game
+    1. alexs-word-game x
     
 1. add prevent sleep
     1. first attempt failed
@@ -25,9 +25,10 @@ history of guesses
 
 1. add touch x
 1. add submit/reset: start with tap
-1. add scoreboard
-1. add scoring
+1. add scoreboard x
+1. add scoring x
 
 ---
 
-define submit at top. Pass downscel
+Add 3 jokers
+Add scrabble style scores to tiles.
