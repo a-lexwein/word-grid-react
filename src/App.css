@@ -71,6 +71,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  pointer-events: all;
+  touch-action: 'none';
+  user-select: 'none';
 }
 
 .options {
