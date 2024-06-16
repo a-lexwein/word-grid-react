@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import './App.css';
 
@@ -12,8 +12,18 @@ import score from '../helpers/score';
 function Main() {
   const { size, freqIndex, seed } = useParams();
   const [currentGuess, setGuess] = useState('');
+  const [timer, setTimer] = useState(60);
   const [wordSubmitted, setWordSubmitted] = useState(false);
   const [history, updateHistory] = useState([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
 
   const submitWord = () => {
     setWordSubmitted(true);  // Signal the word submission event
@@ -31,6 +41,7 @@ function Main() {
   const [options, setOptions] = useState({
     nRows: size ? size.split('x')[0] : 4,
     nCols: size ? size.split('x')[1] : 4,
+    gameLength: 60,
     seed: seed ?? 'hello',
     freqs: freqIndex ? names[freqIndex] : 'TWL 8 - 10',
     mods: [],
@@ -38,6 +49,7 @@ function Main() {
   
   const handleSetOptions = (newOptions) => {
     setOptions(newOptions);
+    setTimer(newOptions.gameLength);
     updateHistory([]);  // Reset the history
   };
 
@@ -50,6 +62,7 @@ function Main() {
         />
       </div>
       <div className="grid-container">
+        <div>&#x1F551; {timer}</div>
         <History history={history}></History>
         <Grid
           options={options}

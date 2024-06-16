@@ -6,6 +6,7 @@ export default function Options({ options, setOptions }) {
   const [nRowsValue, setNRows] = useState(options.nRows);
   const [nColsValue, setNCols] = useState(options.nCols);
   const [selectFreqsValue, setSelectFreqsValue] = useState(options.freqs);
+  const [gameLengthValue, setGameLengthValue] = useState(options.gameLength);
   const [seedValue, setSeedValue] = useState(options.seed);
   const [mods, setMods] = useState(options.mods);
 
@@ -21,6 +22,9 @@ export default function Options({ options, setOptions }) {
 
   const handleFreqsChange = (e) => {
     setSelectFreqsValue(e.target.value);
+  };
+  const handleGameLengthChange = (e) => {
+    setGameLengthValue(e.target.value);
   };
 
   const handleSeedChange = (e) => {
@@ -45,6 +49,7 @@ export default function Options({ options, setOptions }) {
       nRows: nRowsValue,
       nCols: nColsValue,
       freqs: selectFreqsValue,
+      gameLength: gameLengthValue,
       seed: seedValue,
       mods: mods,
     });
@@ -86,6 +91,18 @@ export default function Options({ options, setOptions }) {
           <option key={index} value={x}>{x}</option>
         ))}
       </select>
+
+      <label htmlFor="options">{gameLengthValue} seconds</label>
+      <input
+        type="range"
+        id="gameLength"
+        name="gameLength"
+        min="30"
+        max="300"
+        step="1"
+        value={gameLengthValue}
+        onChange={handleGameLengthChange}>
+      </input>
 
       <label htmlFor="seed">Seed</label>
       <input

@@ -8,7 +8,8 @@ export default function Tile({ id, handleClick, data, currentGuess }) {
   if(tile.clicked) backgroundColor = '#e6d69e'
 
   const handlePointerEnter = (e) => {
-    if(e.buttons !== 0 && currentGuess !== '') handleClick()
+    if(e.pointerType === 'mouse' && e.buttons !== 0 && currentGuess !== '') handleClick()
+    if(e.pointerType === 'touch' && currentGuess !== '') handleClick()
   }
   
   return (
@@ -22,7 +23,7 @@ export default function Tile({ id, handleClick, data, currentGuess }) {
       <div className="tile-points">{tile.point_value}</div>
       <div
           className="hitbox"
-          onPointerDown={handleClick}
+          // onPointerDown={handleClick}
           onPointerEnter={handlePointerEnter}
         />
       </div>

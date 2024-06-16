@@ -23,14 +23,16 @@ history of guesses
     1. first attempt failed
 1. clean-up readme
 
-1. add touch x
-1. add submit/reset: start with tap
+1. add touch x - mousing works but touch drag isn't working
+1. add submit/reset: start with tap x
 1. add scoreboard x
 1. add scoring x
 
+1. add timer
+1. solve mobile controls
 ---
 
-Add 3 jokers
+Add 3 jokers x
 Add scrabble style scores to tiles. x
 
 
@@ -40,4 +42,4 @@ https://orange-space-waffle-gx6v69pqvg53q76-3000.app.github.dev/9x7/18/hello
 https://orange-space-waffle-gx6v69pqvg53q76-3000.app.github.dev/4x5/12/hello
 another one (when cartesian is selected, x is in wrong place)
 
-Fixed
+Fixed this issue above
