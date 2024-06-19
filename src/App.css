@@ -51,8 +51,7 @@
   bottom: 0;
   right: 0;
   padding: min(calc(1vw), 4px);
-  /* font-size: calc(1vw + 2px); */
-  font-size: calc(2vw + 1px);
+  font-size: min(calc(2vw + 1px), 20px);
 }
 
 .hitbox {
