@@ -33,7 +33,7 @@
   height: 14vw;
   width: 14vw;
   font-family: sans-serif;
-  font-size: min(6vw, 50px);
+  font-size: min(9vw, 60px);
   box-shadow: 0 0 0 3px;
   position: relative;
 }

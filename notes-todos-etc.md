@@ -1,20 +1,9 @@
-State in observable bogg
 
-Selected options:
-nrow, nol, freqs, timelimit
-
-current board
-current selected word
-history of guesses
-
-
----
-
-1. scale grid size by viewport
-1. add title
-    1. need to work on css
+1. scale grid size by viewport x
+1. add title x
+    1. need to work on css x
 1. add about page
-1. change options to expand
+1. change options to expand x
 1. come up with better url
     1. alex-bogg
     1. alexs-word-game x
@@ -23,13 +12,20 @@ history of guesses
     1. first attempt failed
 1. clean-up readme
 
-1. add touch x - mousing works but touch drag isn't working
+1. add touch x - mousing works but touch drag isn't working x
 1. add submit/reset: start with tap x
 1. add scoreboard x
 1. add scoring x
 
-1. add timer
-1. solve mobile controls
+1. add timer x
+1. solve mobile controls x
+
+1. refine mobile controls
+1. add blog
+    1. write blog post
+    1. brainstorm blog posts
+1. refine responsive sizing
+1. 
 ---
 
 Add 3 jokers x
