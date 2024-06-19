@@ -44,6 +44,8 @@ function Main() {
     setGuess('');  // Clear the current guess
   };
 
+  const defaultFreq = 12;
+
   const [options, setOptions] = useState({
     nRows: size ? size.split('x')[0] : 8,
     nCols: size ? size.split('x')[1] : 6,
@@ -74,7 +76,7 @@ function Main() {
       seed: newSeed,
     }
     // update url
-    navigate(`/${options.nRows}x${options.nCols}/${freqIndex}/${newSeed}`);
+    navigate(`/${options.nRows}x${options.nCols}/${freqIndex ?? defaultFreq}/${newSeed}`);
     // update game
     handleSetOptions(newOptions);
   }
