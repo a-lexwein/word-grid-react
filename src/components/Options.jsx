@@ -99,7 +99,7 @@ export default function Options({ options, setOptions }) {
         name="gameLength"
         min="30"
         max="300"
-        step="1"
+        step="15"
         value={gameLengthValue}
         onChange={handleGameLengthChange}>
       </input>

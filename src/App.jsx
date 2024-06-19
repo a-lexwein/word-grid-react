@@ -16,7 +16,7 @@ import score from '../helpers/score';
 function Main() {
   const { size, freqIndex, seed } = useParams();
   const [currentGuess, setGuess] = useState('');
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(120);
   const [wordSubmitted, setWordSubmitted] = useState(false);
   const [history, updateHistory] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -47,7 +47,7 @@ function Main() {
   const [options, setOptions] = useState({
     nRows: size ? size.split('x')[0] : 8,
     nCols: size ? size.split('x')[1] : 6,
-    gameLength: 60,
+    gameLength: 120,
     seed: seed ?? 'hello',
     freqs: freqIndex ? names[freqIndex] : 'TWL 8 - 10',
     mods: [],
