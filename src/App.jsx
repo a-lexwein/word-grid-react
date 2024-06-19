@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 import Grid from './components/Grid';
+import Scoreboard from './components/Scoreboard';
 import Options from './components/Options';
-import History from './components/History';
 import names from '../data/freqs-name.json';
 import wordInList from '../helpers/wordInList';
 import score from '../helpers/score';
+
 
 
 
@@ -104,9 +105,11 @@ function Main() {
       <div id="title">Basic Orthographic Grid Game</div>
       <button id="newgame-button" onClick={handleNewGame}>	New Game</button>
       <button id="options-button" onClick={() => setModalOpen(true)}>	&#x2699;&#xFE0F;</button>
+      <Scoreboard
+        timer={timer}
+        history={history}
+      />
       <div className="grid-container">
-        <div>&#x1F551; {timer}</div>
-        <History history={history}></History>
         <Grid
           options={options}
           currentGuess={currentGuess}
