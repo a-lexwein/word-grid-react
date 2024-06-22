@@ -11,17 +11,15 @@ import names from '../data/freqs-name.json';
 import wordInList from '../helpers/wordInList';
 import score from '../helpers/score';
 
-
-
-
 function Main() {
   const { size, freqIndex, seed } = useParams();
   const [currentGuess, setGuess] = useState('');
   const [timer, setTimer] = useState(120);
   const [wordSubmitted, setWordSubmitted] = useState(false);
   const [history, updateHistory] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const modalRef = useRef(null);
+  const [optionsModalOpen, setOptionsModalOpen] = useState(false);
+  const optionsModalRef = useRef(null);
+  
 
   const navigate = useNavigate();
 
@@ -60,7 +58,7 @@ function Main() {
     setOptions(newOptions);
     setTimer(newOptions.gameLength);
     updateHistory([]);  // Reset the history
-    setModalOpen(false);
+    setOptionsModalOpen(false);
   };
 
   const handleNewGame = () => {
@@ -83,13 +81,16 @@ function Main() {
   }
 
   const handleClickOutside = (event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
-      setModalOpen(false);
+    if (optionsModalRef.current && !optionsModalRef.current.contains(event.target)) {
+      setOptionsModalOpen(false);
+    }
+    if (optionsModalRef.current && !optionsModalRef.current.contains(event.target)) {
+      setOptionsModalOpen(false);
     }
   };
 
   useEffect(() => {
-    if (modalOpen) {
+    if (optionsModalOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -98,16 +99,19 @@ function Main() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [modalOpen]);
+  }, [optionsModalOpen]);
+
 
   return (
     <div className="App">
       <div id="title">Basic Orthographic Grid Game</div>
       <button id="newgame-button" onClick={handleNewGame}>	New Game</button>
-      <button id="options-button" onClick={() => setModalOpen(true)}>	&#x2699;&#xFE0F;</button>
+      <button id="options-button" onClick={() => setOptionsModalOpen(true)}>	&#x2699;&#xFE0F;</button>
       <Scoreboard
         timer={timer}
         history={history}
+        handleClickOutside={handleClickOutside}
+
       />
       <div className="grid-container">
         <Grid
@@ -126,10 +130,10 @@ function Main() {
         </div>
       </div>
 
-      {modalOpen && (
+      {optionsModalOpen && (
         <div className="modal" style={{ display: 'flex' }}>
-          <div className="modal-content" ref={modalRef}>
-            <span className="close" onClick={() => setModalOpen(false)}>&times;</span>
+          <div className="modal-content" ref={optionsModalRef}>
+            <span className="close" onClick={() => setOptionsModalOpen(false)}>&times;</span>
             <Options
               options={options}
               setOptions={handleSetOptions}

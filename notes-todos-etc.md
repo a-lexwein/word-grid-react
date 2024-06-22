@@ -20,12 +20,36 @@
 1. add timer x
 1. solve mobile controls x
 
+1. add modal for word list
 1. refine mobile controls
+    1. clicking on activated tile undoes further down the selection.
+    1. dragging doesn't
 1. add blog
     1. write blog post
     1. brainstorm blog posts
 1. refine responsive sizing
-1. 
+1. end game state
+1. link sharing?
+
+## blog ideas:
+
+1. is "is it a sandwich?" a word game?
+    1. https://github.com/a-lexwein/hrsf87-mvp/
+    1. meanings of words are fuzzy things that are extremely context dependent
+
+1. typology of word games:
+    1. semantic vs non-semantic
+    1. regex word games
+    1. is "is it a sandwich?" a word game?
+    1. Boggle vs boggle
+
+1. B.O.G.G. comic
+    1. library
+    1. toilet
+    1. quiet train
+    1. 
+
+1. Is Boggle Fun
 ---
 
 Add 3 jokers x
