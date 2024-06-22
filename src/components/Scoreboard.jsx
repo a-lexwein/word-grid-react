@@ -1,7 +1,6 @@
-import History from '../components/History';
+import HistoryBar from './HistoryBar';
+import History from './History';
 import  { useState, useEffect, useRef } from 'react';
-
-
 
 export default function Scoreboard({ timer, history} ) {
     const [historyModalOpen, setHistoryModalOpen] = useState(false);
@@ -30,23 +29,23 @@ export default function Scoreboard({ timer, history} ) {
       }, [historyModalOpen]);
 
     const histModal = (
-        <ol>
+        <ul>
             {history.map(x=> <li>{x.word}</li>)}
-        </ol>
+        </ul>
     )
 
     return (
         <div className="scoreboard">
             <div>&#128337; {timer}</div>
             <div># {currentScore}</div>
-            <History history={history}></History>
+            <HistoryBar history={history}/>
             <button onClick={()=>setHistoryModalOpen(true)}>&#128214;</button>
             
             {historyModalOpen && (
         <div className="modal" style={{ display: 'flex' }}>
           <div className="modal-content" ref={historyModalRef}>
             <span className="close" onClick={() => setHistoryModalOpen(false)}>&times;</span>
-            {histModal}
+            <History history={history}/>
           </div>
         </div>
       )}
