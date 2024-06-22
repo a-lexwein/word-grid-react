@@ -59,6 +59,7 @@ function Main() {
     setTimer(newOptions.gameLength);
     updateHistory([]);  // Reset the history
     setOptionsModalOpen(false);
+    setGuess('')
   };
 
   const handleNewGame = () => {
