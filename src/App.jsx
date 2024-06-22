@@ -106,8 +106,10 @@ function Main() {
   return (
     <div className="App">
       <div id="title">Basic Orthographic Grid Game</div>
-      <button id="newgame-button" onClick={handleNewGame}>	New Game</button>
-      <button id="options-button" onClick={() => setOptionsModalOpen(true)}>	&#x2699;&#xFE0F;</button>
+      <div id="button-row">
+        <button id="newgame-button" onClick={handleNewGame}>	New Game</button>
+        <button id="options-button" onClick={() => setOptionsModalOpen(true)}>	&#x2699;&#xFE0F;</button>
+      </div>
       <Scoreboard
         timer={timer}
         history={history}

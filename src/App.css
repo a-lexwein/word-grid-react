@@ -1,7 +1,7 @@
 .App {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  
   align-items: center;
   height: 100vh;
 }
@@ -67,22 +67,21 @@
 }
 
 #title {
-  position: absolute;
-  top: 0;
   color: white;
   background-color: black;
   width: 100%;
+}
 
+#button-row {
+  padding: 15px;
 }
 
 #options-button {
   position: absolute;
-  top: 28px;
   right: 15px;
 }
 #newgame-button {
   position: absolute;
-  top: 28px;
   left: 15px;
 }
 .options {
