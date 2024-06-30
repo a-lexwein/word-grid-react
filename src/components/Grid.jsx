@@ -4,7 +4,7 @@ import Tile from './Tile';
 import newBoard from '../../helpers/newBoard';
 import freqs from '../../data/freqs.json';
 
-export default function Grid({ options, currentGuess, setGuess, wordSubmitted, setWordSubmitted, submitWord }) {
+export default function Grid({ options, currentGuess, setGuess, wordSubmitted, setWordSubmitted, submitWord, gameState }) {
   const [board, setBoard] = useState(() => newBoard(freqs, options.freqs, options.nRows, options.nCols, options.seed));
   const [liveBoard, updateBoard] = useState(board);
 
@@ -32,7 +32,8 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
     }
   }, [wordSubmitted, options, setWordSubmitted]);
 
-  const handleClick = (id) => {
+  const handleClick = (id, gameState) => {
+    if (gameState != 'in-game') return;
     // make a deep copy of data
     let copy = JSON.parse(JSON.stringify(liveBoard));
     // get record for clicked tile
@@ -79,7 +80,7 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
           <Tile
             key={i}
             id={i}
-            handleClick={() => handleClick(i)}
+            handleClick={() => handleClick(i, gameState)}
             data={data}
             currentGuess={currentGuess}
           />

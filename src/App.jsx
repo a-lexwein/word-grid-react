@@ -19,17 +19,36 @@ function Main() {
   const [history, updateHistory] = useState([]);
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
   const optionsModalRef = useRef(null);
+  const [gameState, setGameState] = useState('in-game')
   
-
   const navigate = useNavigate();
+
+  const defaultFreq = 12;
+
+  const [options, setOptions] = useState({
+    nRows: size ? size.split('x')[0] : 8,
+    nCols: size ? size.split('x')[1] : 6,
+    gameLength: 120,
+    seed: seed ?? 'hello',
+    freqs: freqIndex ? names[freqIndex] : 'TWL 8 - 10',
+    mods: [],
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
+      setTimer((prevTimer) => {
+        if (prevTimer > 0) {
+          return prevTimer - 1;
+        } else {
+          clearInterval(interval);
+          setGameState('post-game');
+          return 0;
+        }
+      });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [options]);
 
   const submitWord = () => {
     setWordSubmitted(true);  // Signal the word submission event
@@ -42,17 +61,6 @@ function Main() {
 
     setGuess('');  // Clear the current guess
   };
-
-  const defaultFreq = 12;
-
-  const [options, setOptions] = useState({
-    nRows: size ? size.split('x')[0] : 8,
-    nCols: size ? size.split('x')[1] : 6,
-    gameLength: 120,
-    seed: seed ?? 'hello',
-    freqs: freqIndex ? names[freqIndex] : 'TWL 8 - 10',
-    mods: [],
-  });
   
   const handleSetOptions = (newOptions) => {
     setOptions(newOptions);
@@ -79,6 +87,7 @@ function Main() {
     navigate(`/${options.nRows}x${options.nCols}/${freqIndex ?? defaultFreq}/${newSeed}`);
     // update game
     handleSetOptions(newOptions);
+    setGameState('in-game');
   }
 
   const handleClickOutside = (event) => {
@@ -124,6 +133,7 @@ function Main() {
           wordSubmitted={wordSubmitted}
           setWordSubmitted={setWordSubmitted}
           submitWord={submitWord}
+          gameState={gameState}
         />
         <div
           className="current-guess"

@@ -97,7 +97,7 @@ export default function Options({ options, setOptions }) {
         type="range"
         id="gameLength"
         name="gameLength"
-        min="30"
+        min="15"
         max="300"
         step="15"
         value={gameLengthValue}

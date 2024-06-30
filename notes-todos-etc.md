@@ -20,7 +20,7 @@
 1. add timer x
 1. solve mobile controls x
 
-1. add modal for word list
+1. add modal for word list x
 1. refine mobile controls
     1. clicking on activated tile undoes further down the selection.
     1. dragging doesn't
@@ -29,6 +29,8 @@
     1. brainstorm blog posts
 1. refine responsive sizing
 1. end game state
+    1. don't allow input if 0 x - still need to submit on 0 or something
+    1. blinking last 5 seconds
 1. link sharing?
 
 ## blog ideas:
