@@ -30,7 +30,7 @@
 1. refine responsive sizing
 1. end game state
     1. don't allow input if 0 x - still need to submit on 0 or something
-    1. blinking last 5 seconds
+    1. blinking last 5 seconds x - not blinking but changes color
 1. link sharing?
 
 ## blog ideas:

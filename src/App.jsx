@@ -19,7 +19,8 @@ function Main() {
   const [history, updateHistory] = useState([]);
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
   const optionsModalRef = useRef(null);
-  const [gameState, setGameState] = useState('in-game')
+  const [gameState, setGameState] = useState('in-game');
+  const [last5seconds, setLast5Seconds] = useState(false);
   
   const navigate = useNavigate();
 
@@ -38,6 +39,7 @@ function Main() {
     const interval = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer > 0) {
+          if (prevTimer <= 5) setLast5Seconds(true)
           return prevTimer - 1;
         } else {
           clearInterval(interval);
@@ -67,7 +69,8 @@ function Main() {
     setTimer(newOptions.gameLength);
     updateHistory([]);  // Reset the history
     setOptionsModalOpen(false);
-    setGuess('')
+    setGuess('');
+    setLast5Seconds(false);
   };
 
   const handleNewGame = () => {
@@ -134,6 +137,7 @@ function Main() {
           setWordSubmitted={setWordSubmitted}
           submitWord={submitWord}
           gameState={gameState}
+          last5Seconds={last5seconds}
         />
         <div
           className="current-guess"

@@ -4,7 +4,7 @@ import Tile from './Tile';
 import newBoard from '../../helpers/newBoard';
 import freqs from '../../data/freqs.json';
 
-export default function Grid({ options, currentGuess, setGuess, wordSubmitted, setWordSubmitted, submitWord, gameState }) {
+export default function Grid({ options, currentGuess, setGuess, wordSubmitted, setWordSubmitted, submitWord, gameState, last5Seconds }) {
   const [board, setBoard] = useState(() => newBoard(freqs, options.freqs, options.nRows, options.nCols, options.seed));
   const [liveBoard, updateBoard] = useState(board);
 
@@ -83,6 +83,7 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
             handleClick={() => handleClick(i, gameState)}
             data={data}
             currentGuess={currentGuess}
+            last5Seconds={last5Seconds}
           />
         ))
       }
