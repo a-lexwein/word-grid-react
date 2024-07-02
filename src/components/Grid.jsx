@@ -50,11 +50,12 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
     // otherwise not clickable and do nothing
     // TODO: clickable===false doesn't really mean non clickable if I'm using it for submission.
     // TODO: move this to click behavior instead of also drag.
+    
     if (tile.clickable === false) {
           // Check if lastTile is defined before accessing its id property
-      if (lastTile && tile.id === lastTile.id) {
-        submitWord();
-    }
+    //   if (lastTile && tile.id === lastTile.id) {
+    //     submitWord();
+    // }
       return;
     };
 
@@ -70,7 +71,61 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
 
     updateBoard(copy);
 
-    setGuess(currentGuess + tile.letter);
+    setGuess(currentGuess + tile.letter.toUpperCase());
+  };
+
+  const handleTap = (id, gameState) => {
+    if (gameState != 'in-game') return;
+    // make a deep copy of data
+    let copy = JSON.parse(JSON.stringify(liveBoard));
+    // get record for clicked tile
+    let tile = copy.filter(x => x.id === id)[0];
+
+    // get make click_order
+    let max_click_order = Math.max(...copy.map(x => x.selected_order)) || 0;
+    // get currently active tile
+    let lastTile = copy.filter(x => max_click_order > 0 && x.selected_order === max_click_order)[0];
+
+    // taps on previously selected tile returns to activate that tile
+    if (tile.clickable === false && tile.selected_order < max_click_order) {
+      copy = copy.map(x => ({
+          ...x,
+          clicked: x.selected_order > tile.selected_order ? false : x.clicked,
+          clickable: x.selected_order > tile.selected_order && x.letter != "_" ? true : x.clickable,
+          selected_order: x.selected_order > tile.selected_order ? 0 : x.selected_order,
+        }))
+      let newGuess = currentGuess.slice(0, tile.selected_order)
+      setGuess(newGuess);
+      updateBoard(copy);
+    }
+    // check if clickable
+    // also check if a submission
+    // if a submission, submit
+    // otherwise not clickable and do nothing
+    // TODO: clickable===false doesn't really mean non clickable if I'm using it for submission.
+    if (tile.clickable === false) {
+          // Check if lastTile is defined before accessing its id property
+      if (lastTile && tile.id === lastTile.id) {
+        submitWord();
+      }
+
+      return;
+    };
+
+
+    // check if record is neighbor
+    let recordIsNeighbor = lastTile === undefined || (Math.abs(lastTile.x - tile.x) <= 1 && Math.abs(lastTile.y - tile.y) <= 1);
+    // if not neighbor, do nothing
+    if (!recordIsNeighbor) return;
+
+    // If the tile is a clickable neighbor, set row to clicked and click_order to max+1
+    tile.clickable = false;
+    tile.clicked = true;
+    tile.selected_order = max_click_order + 1;
+
+    updateBoard(copy);
+
+    setGuess(currentGuess + tile.letter.toUpperCase());
   };
 
   return (
@@ -81,6 +136,7 @@ export default function Grid({ options, currentGuess, setGuess, wordSubmitted, s
             key={i}
             id={i}
             handleClick={() => handleClick(i, gameState)}
+            handleTap={() => handleTap(i, gameState)}
             data={data}
             currentGuess={currentGuess}
             last5Seconds={last5Seconds}

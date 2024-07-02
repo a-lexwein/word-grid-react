@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Tile({ id, handleClick, data, currentGuess, last5Seconds }) {
+export default function Tile({ id, handleClick, handleTap, data, currentGuess, last5Seconds }) {
   let tile = data.filter(x=> x.id === id)[0]
   let max_selected = Math.max(...data.map(x=> x.selected_order)) || 0
 
@@ -14,12 +14,13 @@ export default function Tile({ id, handleClick, data, currentGuess, last5Seconds
     if(e.pointerType === 'touch' && currentGuess !== '') handleClick()
   }
   const tileClass = last5Seconds ? 'tile-last5Seconds' : 'tile'
-   const div  = (
+
+  const div  = (
     <div
       id={id}
       className={tileClass}
       style={{ backgroundColor: backgroundColor }}
-      onPointerDown={handleClick}
+      onPointerDown={handleTap}
     >
       <div className="tile-text">{tile.letter}</div>
       <div className="tile-points">{tile.point_value}</div>

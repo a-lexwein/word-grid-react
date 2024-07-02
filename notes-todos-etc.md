@@ -22,8 +22,8 @@
 
 1. add modal for word list x
 1. refine mobile controls
-    1. clicking on activated tile undoes further down the selection.
-    1. dragging doesn't
+    1. clicking on activated tile undoes further down the selection. x
+    1. dragging doesn't x
 1. add blog
     1. write blog post
     1. brainstorm blog posts
@@ -32,6 +32,8 @@
     1. don't allow input if 0 x - still need to submit on 0 or something
     1. blinking last 5 seconds x - not blinking but changes color
 1. link sharing?
+1. color the current letter differently
+1. add path or something?
 
 ## blog ideas:
 
