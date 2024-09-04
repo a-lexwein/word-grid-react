@@ -7,6 +7,8 @@ export default function Eggjam() {
     const [yPos, setY] = useState(-75);
     const [letters, updateLetters] = useState(() => newStartingLetters(11));
 
+    const [currentGuess, updateGuess] = useState('')
+
 
     const width = 300;
     const height = 500;
@@ -16,10 +18,24 @@ export default function Eggjam() {
     // Game loop that ticks every 0.1 seconds
     useEffect(() => {
         const interval = setInterval(() => {
+            const tickY = .5;
             
             updateLetters(prevLetters => {
+                let output = prevLetters;
+                // check for collisions
+                for (const d of output) {
+                    if (
+                        d.x === xPos
+                        && d.selected === false
+                        && d.y - yPos >= 0
+                        && d.y - yPos < tickY
+                    ) {
+                      d.selected = true;
+                      updateGuess(prevGuess => prevGuess + d.letter)
+                    }
+                } 
                 // move letters
-                let output = prevLetters.map(letter => ({
+                output = output.map(letter => ({
                     ...letter,
                     y: letter.y - .5,
                 }))
@@ -31,7 +47,8 @@ export default function Eggjam() {
                     output.push(...newRow(350))
                 }
 
-                // check for collisions
+                
+                
 
                 return output
             }
@@ -93,7 +110,7 @@ export default function Eggjam() {
 
                 <polygon points={polyPoints} fill="white" stroke="black" />
             </svg>
-            <div>{letters.length}</div>
+            <div>{currentGuess}</div>
         </div>
     );
 }
