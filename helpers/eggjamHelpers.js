@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-export default function newStartingLetters(nRows) {
+export function newStartingLetters(nRows) {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   
   let arr = []
@@ -18,4 +18,17 @@ export default function newStartingLetters(nRows) {
     arr.push(row) 
   }
   return arr.flat()
+}
+
+export function newRow(y) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  let row = _.shuffle([-60, -30, 0, 30, 60])
+  .slice(0,2)
+  .map(x => ({
+    x: x,
+    y: y,
+    letter: _.sample(alphabet),
+    selected: false,
+  }))
+  return row
 }
