@@ -4,74 +4,99 @@ import { newStartingLetters, newRow } from '../../helpers/eggjamHelpers';
 
 export default function Eggjam() {
     const [xPos, setX] = useState(0);
+    const xPosRef = useRef(xPos); // Ref to hold the current xPos
     const [yPos, setY] = useState(-75);
     const [letters, updateLetters] = useState(() => newStartingLetters(11));
+    const [currentGuess, updateGuess] = useState('');
 
-    const [currentGuess, updateGuess] = useState('')
+    const moveLeft = () => {
+        setX(prevXpos => {
+            const newXpos = Math.max(prevXpos - 30, -60);
+            xPosRef.current = newXpos; // Update the ref with the new value
+            return newXpos;
+        });
+    };
 
+    const moveRight = () => {
+        setX(prevXpos => {
+            const newXpos = Math.min(prevXpos + 30, 60);
+            xPosRef.current = newXpos; // Update the ref with the new value
+            return newXpos;
+        });
+    };
 
     const width = 300;
     const height = 500;
     const xScale = scaleLinear([-100, 100], [0, width]);
     const yScale = scaleLinear([100, -100], [0, height]);
 
-    // Game loop that ticks every 0.1 seconds
+    const getPolyPoints = (xPos) => ([
+        [xScale(0 + xPosRef.current), yScale(-75)],
+        [xScale(-5 + xPosRef.current), yScale(-85)],
+        [xScale(5 + xPosRef.current), yScale(-85)]
+    ])
+    .map(([a, b]) => a.toString() + " " + b.toString())
+    .join(',');
+
+    // Game Loop
     useEffect(() => {
         const interval = setInterval(() => {
-            const tickY = .5;
-            
+            const tickY = 0.6;
+
             updateLetters(prevLetters => {
                 let output = prevLetters;
-                // check for collisions
+                
+                // Check for collisions
                 for (const d of output) {
                     if (
-                        d.x === xPos
-                        && d.selected === false
-                        && d.y - yPos >= 0
-                        && d.y - yPos < tickY
+                        d.x === xPosRef.current &&
+                        d.selected === false &&
+                        d.y - yPos >= 0 &&
+                        d.y - yPos < tickY
                     ) {
-                      d.selected = true;
-                      updateGuess(prevGuess => prevGuess + d.letter)
+                        d.selected = true;
+                        updateGuess(prevGuess => prevGuess + d.letter);
                     }
-                } 
-                // move letters
-                output = output.map(letter => ({
-                    ...letter,
-                    y: letter.y - .5,
-                }))
-                // remove rows
-                output = output.filter(letter => letter.y >= -101)
-
-                // replace removed rows
-                if (output.length < prevLetters.length) {
-                    output.push(...newRow(350))
                 }
 
-                
-                
+                // Move letters
+                output = output.map(letter => ({
+                    ...letter,
+                    y: letter.y - tickY,
+                }));
 
-                return output
-            }
+                // Remove rows
+                output = output.filter(letter => letter.y >= -101);
 
-            );
-            
+                // Replace removed rows
+                if (output.length < prevLetters.length) {
+                    output.push(...newRow(350));
+                }
 
-            
+                return output;
+            });
 
-
-            
         }, 10);
 
-        return () => clearInterval(interval); // Clean up the interval on unmount
+        return () => clearInterval(interval);
     }, []);
 
-    let polyPoints = [
-        [xScale(0 - xPos), yScale(-75)],
-        [xScale(-5 - xPos), yScale(-85)],
-        [xScale(5 - xPos), yScale(-85)]
-    ]
-    .map(([a,b]) => a.toString() + " " + b.toString())
-    .join(',');
+    // Controls
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'ArrowLeft') {
+                moveLeft();
+            } else if (event.key === 'ArrowRight') {
+                moveRight();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
     return (
         <div className='App'>
@@ -108,7 +133,7 @@ export default function Eggjam() {
                     </g>
                 ))}
 
-                <polygon points={polyPoints} fill="white" stroke="black" />
+                <polygon points={getPolyPoints(xPos)} fill="white" stroke="black" />
             </svg>
             <div>{currentGuess}</div>
         </div>
