@@ -1,0 +1,11 @@
+.guess {
+    margin-right: 4px;
+}
+
+.guess.right {
+    color: green
+}
+
+.guess.wrong {
+    color: red
+}

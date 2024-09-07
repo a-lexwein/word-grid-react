@@ -67,3 +67,13 @@ https://orange-space-waffle-gx6v69pqvg53q76-3000.app.github.dev/4x5/12/hello
 another one (when cartesian is selected, x is in wrong place)
 
 Fixed this issue above
+
+
+# Eggjam 23
+
+indicate when a letter is selected
+
+5 letter version:
+
+check if word length = 5, add to score.
+tween movements

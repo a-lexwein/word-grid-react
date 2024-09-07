@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { newStartingLetters, newRow, rowsInLetters } from '../../helpers/eggjamHelpers';
 import wordInList from '../../helpers/wordInList';
+import { update } from 'lodash';
+
+import './Eggjam.css'
 
 
 export default function Eggjam() {
@@ -10,8 +13,17 @@ export default function Eggjam() {
     const [yPos, setY] = useState(-75);
     const [letters, updateLetters] = useState(() => newStartingLetters(11));
     const [currentGuess, updateGuess] = useState('');
+    const [hist, updateHist] = useState([])
 
     const letterCount = 4;
+
+    const log = (word, hist) => {
+        const output = {};
+        output.word = word;
+        output.is_valid = wordInList(word);
+        output.used = hist.includes(word);
+        return output;
+    }
 
     const moveLeft = () => {
         setX(prevXpos => {
@@ -45,10 +57,11 @@ export default function Eggjam() {
     // Game Loop
     useEffect(() => {
         const interval = setInterval(() => {
-            const tickY = 0.6;
+            const tickY =  0.7; // 1
 
             updateLetters(prevLetters => {
                 let output = prevLetters;
+                let newGuess = currentGuess;
                 
                 // Check for collisions
                 for (const d of output) {
@@ -59,8 +72,16 @@ export default function Eggjam() {
                         d.y - yPos < tickY
                     ) {
                         d.selected = true;
-                        updateGuess(prevGuess => prevGuess + d.letter);
+                        newGuess += d.letter;
+                        updateGuess(newGuess);
                     }
+                }
+
+                // If that completes a word, validate and reset currentWord
+                if (newGuess.length === letterCount) {
+                    updateHist(hist => ([...hist, log(newGuess, hist)]))
+                    updateGuess('')
+
                 }
 
                 // Move letters
@@ -83,7 +104,7 @@ export default function Eggjam() {
         }, 10);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [currentGuess]);
 
     // Keyboard
     useEffect(() => {
@@ -102,7 +123,7 @@ export default function Eggjam() {
         };
     }, []);
 
-    // swipe controcts
+    // swipe controls
     const svgRef = useRef(null);
     useEffect(() => {
         const svg = svgRef.current;
@@ -148,7 +169,7 @@ export default function Eggjam() {
 
     return (
         <div className='App'>
-            <div id='title'>Eggjam #23</div>
+            <div id='title'>Eggjam #23: Spell {letterCount}-letter Words</div>
             <svg
                 ref={svgRef}
                 style={{ backgroundColor: '#D3D3D3' }}
@@ -185,6 +206,7 @@ export default function Eggjam() {
                 <polygon points={getPolyPoints(xPos)} fill="white" stroke="black" />
             </svg>
             <div>{currentGuess}</div>
+            <div>{hist.map(x=><span className={`guess ${x.is_valid ? "right" : "wrong"}`}>{x.word}</span>)}</div>
         </div>
     );
 }
