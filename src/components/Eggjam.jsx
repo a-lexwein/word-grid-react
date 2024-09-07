@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { scaleLinear } from 'd3-scale';
-import { newStartingLetters, newRow } from '../../helpers/eggjamHelpers';
+import { newStartingLetters, newRow, rowsInLetters } from '../../helpers/eggjamHelpers';
+import wordInList from '../../helpers/wordInList';
+
 
 export default function Eggjam() {
     const [xPos, setX] = useState(0);
@@ -8,6 +10,8 @@ export default function Eggjam() {
     const [yPos, setY] = useState(-75);
     const [letters, updateLetters] = useState(() => newStartingLetters(11));
     const [currentGuess, updateGuess] = useState('');
+
+    const letterCount = 4;
 
     const moveLeft = () => {
         setX(prevXpos => {
@@ -30,7 +34,7 @@ export default function Eggjam() {
     const xScale = scaleLinear([-100, 100], [0, width]);
     const yScale = scaleLinear([100, -100], [0, height]);
 
-    const getPolyPoints = (xPos) => ([
+    const getPolyPoints = () => ([
         [xScale(0 + xPosRef.current), yScale(-75)],
         [xScale(-5 + xPosRef.current), yScale(-85)],
         [xScale(5 + xPosRef.current), yScale(-85)]
@@ -69,7 +73,7 @@ export default function Eggjam() {
                 output = output.filter(letter => letter.y >= -101);
 
                 // Replace removed rows
-                if (output.length < prevLetters.length) {
+                if (rowsInLetters(output) < rowsInLetters(prevLetters)) {
                     output.push(...newRow(350));
                 }
 
@@ -81,7 +85,7 @@ export default function Eggjam() {
         return () => clearInterval(interval);
     }, []);
 
-    // Controls
+    // Keyboard
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === 'ArrowLeft') {
@@ -98,10 +102,55 @@ export default function Eggjam() {
         };
     }, []);
 
+    // swipe controcts
+    const svgRef = useRef(null);
+    useEffect(() => {
+        const svg = svgRef.current;
+        let touchStartX = null;
+
+        const handleTouchStart = (e) => {
+            touchStartX = e.touches[0].clientX;
+        };
+
+        const handleTouchMove = (e) => {
+            if (!touchStartX) return;
+
+            const touchEndX = e.touches[0].clientX;
+            const touchDiffX = touchStartX - touchEndX;
+
+            if (touchDiffX > 30) {
+                moveLeft();
+                touchStartX = null; // Reset after handling swipe
+            } else if (touchDiffX < -30) {
+                moveRight();
+                touchStartX = null; // Reset after handling swipe
+            }
+        };
+
+        const handleTouchEnd = () => {
+            touchStartX = null; // Reset after touch ends
+        };
+
+        if (svg) {
+            svg.addEventListener('touchstart', handleTouchStart);
+            svg.addEventListener('touchmove', handleTouchMove);
+            svg.addEventListener('touchend', handleTouchEnd);
+        }
+
+        return () => {
+            if (svg) {
+                svg.removeEventListener('touchstart', handleTouchStart);
+                svg.removeEventListener('touchmove', handleTouchMove);
+                svg.removeEventListener('touchend', handleTouchEnd);
+            }
+        };
+    }, []);
+
     return (
         <div className='App'>
             <div id='title'>Eggjam #23</div>
             <svg
+                ref={svgRef}
                 style={{ backgroundColor: '#D3D3D3' }}
                 height={height}
                 width={width}
