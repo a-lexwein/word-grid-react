@@ -11,6 +11,8 @@ import names from '../data/freqs-name.json';
 import wordInList from '../helpers/wordInList';
 import score from '../helpers/score';
 
+import Eggjam from './components/Eggjam';
+
 function Main() {
   const { size, freqIndex, seed } = useParams();
   const [currentGuess, setGuess] = useState('');
@@ -171,6 +173,8 @@ function App() {
           path="/:size/:freqIndex/:seed"
           element={<Main />}
         />
+
+<Route path="/eggjam" element={<Eggjam />} />
       </Routes>
     </BrowserRouter>
   );
