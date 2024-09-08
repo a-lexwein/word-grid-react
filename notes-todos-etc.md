@@ -76,6 +76,7 @@ indicate when a letter is selected
 5 letter version:
 
 check if word length = 5, add to score.
+
 tween movements
 
 add timer x
@@ -87,3 +88,4 @@ options for letter length and speed
 
 fix scoreboard props thing
 Blog post
+
