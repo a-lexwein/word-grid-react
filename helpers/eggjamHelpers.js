@@ -1,5 +1,16 @@
 import _ from 'lodash';
-import randomElement from '../helpers/randomElement';
+import freqs from '../data/freqs.json';
+import bagOfLetters from './bagOfLetters';
+
+
+const randomSort = (a,b) => Math.random() - .5; // chatgpt
+
+export function randomElement() {
+    const bag = bagOfLetters(freqs, 'TWL 6 & 7 Uniques')
+    return bag.sort(randomSort)[0]
+
+
+}
 
 export function newStartingLetters(nRows) {
   

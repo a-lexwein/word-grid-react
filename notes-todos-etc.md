@@ -89,7 +89,7 @@ options for letter length and speed
 fix scoreboard props thing
 Blog post
 
-increase speed
+increase speed x
 
 new game menu
 instructions

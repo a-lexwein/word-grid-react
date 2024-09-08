@@ -174,7 +174,7 @@ function App() {
           element={<Main />}
         />
 
-<Route path="/eggjam" element={<Eggjam />} />
+<Route path="/eggjam23" element={<Eggjam />} />
       </Routes>
     </BrowserRouter>
   );

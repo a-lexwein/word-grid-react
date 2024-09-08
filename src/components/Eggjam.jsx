@@ -61,14 +61,14 @@ export default function Eggjam() {
 
     const getPolyPoints = () => ([
         [xScale(-3 + xPosRef.current), yScale(yPos-8)],
-        [xScale(-25 + xPosRef.current), yScale(yPos-13)],
-        [xScale(-3 + xPosRef.current), yScale(yPos-13)],
-        [xScale(-3 + xPosRef.current), yScale(yPos-18)],
+        [xScale(-25 + xPosRef.current), yScale(yPos-15)],
+        [xScale(-3 + xPosRef.current), yScale(yPos-15)],
+        [xScale(-3 + xPosRef.current), yScale(yPos-20)],
         [xScale(-10 + xPosRef.current), yScale(yPos-23)],
         [xScale(10 + xPosRef.current), yScale(yPos-23)],
-        [xScale(3 + xPosRef.current), yScale(yPos-18)],
-        [xScale(3 + xPosRef.current), yScale(yPos-13)],
-        [xScale(25 + xPosRef.current), yScale(yPos-13)],
+        [xScale(3 + xPosRef.current), yScale(yPos-20)],
+        [xScale(3 + xPosRef.current), yScale(yPos-15)],
+        [xScale(25 + xPosRef.current), yScale(yPos-15)],
         [xScale(3 + xPosRef.current), yScale(yPos-8)],
         [xScale(1 + xPosRef.current), yScale(yPos-3)],
         [xScale(-1 + xPosRef.current), yScale(yPos-3)],
@@ -104,8 +104,8 @@ export default function Eggjam() {
 
     // Game Loop for letters
     useEffect(() => {
-        if (gameState != 'in-game') return;
         const interval = setInterval(() => {
+            if (gameState != 'in-game') return;
 
             updateLetters(prevLetters => {
                 let output = prevLetters;
@@ -218,10 +218,18 @@ export default function Eggjam() {
         };
     }, []);
 
+    const handleNewGame = () => {
+        updateHist([]);
+        updateGuess('');
+        setTimer(45);
+        setTickY(0.7);
+        setGameState('in-game');
+    };
+
     return (
         <div className='App'>
-            <div id='title'>Eggjam #23: Spell {letterCount}-letter Words</div>
-            <button>New Game</button>
+            <div id='title'>Eggjam #23: Air n' Spelling</div>
+            <button onClick={handleNewGame}>New Game</button>
             <svg
                 ref={svgRef}
                 style={{ backgroundColor: '#bccaeb' }}
@@ -262,7 +270,7 @@ export default function Eggjam() {
                 history={hist}
             />
             <div>
-                Rules: Use arrow keys to move. Find as many 4-letter words as you can. Each word found adds time and increases speed.
+                Rules: Use arrow keys to move. Find as many 4-letter words as you can before the timer reaches zero. Each word found adds time and increases speed.
             </div>
         </div>
     );
