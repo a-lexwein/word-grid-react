@@ -12,7 +12,7 @@ export function newStartingLetters(nRows) {
       .slice(0,nLettersInRow)
       .map(x => ({
         x: x,
-        y: -30 + i * 40,
+        y: 120 + i * 40,
         letter: randomElement(),
         selected: false,
       }))

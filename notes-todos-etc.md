@@ -76,4 +76,17 @@ indicate when a letter is selected
 5 letter version:
 
 check if word length = 5, add to score.
+
+add timer x
+
+Scoring:
+Start with 30sec +X for each word
+stop game at 0s
+options for letter length and speed
+
+fix scoreboard props thing
+Blog post
+
+
 tween movements
+

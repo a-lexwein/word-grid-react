@@ -1,212 +1,183 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { scaleLinear } from 'd3-scale';
-import { newStartingLetters, newRow, rowsInLetters } from '../../helpers/eggjamHelpers';
-import wordInList from '../../helpers/wordInList';
-import { update } from 'lodash';
+import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import './Eggjam.css'
+import './App.css';
 
+import Grid from './components/Grid';
+import Scoreboard from './components/Scoreboard';
+import Options from './components/Options';
+import names from '../data/freqs-name.json';
+import wordInList from '../helpers/wordInList';
+import score from '../helpers/score';
 
-export default function Eggjam() {
-    const [xPos, setX] = useState(0);
-    const xPosRef = useRef(xPos); // Ref to hold the current xPos
-    const [yPos, setY] = useState(-75);
-    const [letters, updateLetters] = useState(() => newStartingLetters(11));
-    const [currentGuess, updateGuess] = useState('');
-    const [hist, updateHist] = useState([])
+import Eggjam from './components/Eggjam';
 
-    const letterCount = 4;
+function Main() {
+  const { size, freqIndex, seed } = useParams();
+  const [currentGuess, setGuess] = useState('');
+  const [timer, setTimer] = useState(120);
+  const [wordSubmitted, setWordSubmitted] = useState(false);
+  const [history, updateHistory] = useState([]);
+  const [optionsModalOpen, setOptionsModalOpen] = useState(false);
+  const optionsModalRef = useRef(null);
+  const [gameState, setGameState] = useState('in-game');
+  const [last5seconds, setLast5Seconds] = useState(false);
+  
+  const navigate = useNavigate();
 
-    const log = (word, hist) => {
-        const output = {};
-        output.word = word;
-        output.is_valid = wordInList(word);
-        output.used = hist.includes(word);
-        return output;
+  const defaultFreq = 12;
+
+  const [options, setOptions] = useState({
+    nRows: size ? size.split('x')[0] : 8,
+    nCols: size ? size.split('x')[1] : 6,
+    gameLength: 120,
+    seed: seed ?? 'hello',
+    freqs: freqIndex ? names[freqIndex] : 'TWL 8 - 10',
+    mods: [],
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer > 0) {
+          if (prevTimer <= 5) setLast5Seconds(true)
+          return prevTimer - 1;
+        } else {
+          clearInterval(interval);
+          setGameState('post-game');
+          return 0;
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [options]);
+
+  const submitWord = () => {
+    setWordSubmitted(true);  // Signal the word submission event
+    let submission = {
+      word: currentGuess,
+      valid: wordInList(currentGuess),
+      score: wordInList(currentGuess) ? score(currentGuess) : 0,
+    }
+    updateHistory([...history, submission])
+
+    setGuess('');  // Clear the current guess
+  };
+  
+  const handleSetOptions = (newOptions) => {
+    setOptions(newOptions);
+    setTimer(newOptions.gameLength);
+    updateHistory([]);  // Reset the history
+    setOptionsModalOpen(false);
+    setGuess('');
+    setLast5Seconds(false);
+  };
+
+  const handleNewGame = () => {
+    // add random string to seed
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let newSeed = '';
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      newSeed += characters[randomIndex];
     }
 
-    const moveLeft = () => {
-        setX(prevXpos => {
-            const newXpos = Math.max(prevXpos - 30, -60);
-            xPosRef.current = newXpos; // Update the ref with the new value
-            return newXpos;
-        });
+    const newOptions = {
+      ...options,
+      seed: newSeed,
+    }
+    // update url
+    navigate(`/${options.nRows}x${options.nCols}/${freqIndex ?? defaultFreq}/${newSeed}`);
+    // update game
+    handleSetOptions(newOptions);
+    setGameState('in-game');
+  }
+
+  const handleClickOutside = (event) => {
+    if (optionsModalRef.current && !optionsModalRef.current.contains(event.target)) {
+      setOptionsModalOpen(false);
+    }
+    if (optionsModalRef.current && !optionsModalRef.current.contains(event.target)) {
+      setOptionsModalOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (optionsModalOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     };
+  }, [optionsModalOpen]);
 
-    const moveRight = () => {
-        setX(prevXpos => {
-            const newXpos = Math.min(prevXpos + 30, 60);
-            xPosRef.current = newXpos; // Update the ref with the new value
-            return newXpos;
-        });
-    };
 
-    const width = 300;
-    const height = 500;
-    const xScale = scaleLinear([-100, 100], [0, width]);
-    const yScale = scaleLinear([100, -100], [0, height]);
+  return (
+    <div className="App">
+      <div id="title">Basic Orthographic Grid Game</div>
+      <div id="button-row">
+        <button id="newgame-button" onClick={handleNewGame}>	New Game</button>
+        <button id="options-button" onClick={() => setOptionsModalOpen(true)}>	&#x2699;&#xFE0F;</button>
+      </div>
+      <Scoreboard
+        timer={timer}
+        history={history}
+        handleClickOutside={handleClickOutside}
 
-    const getPolyPoints = () => ([
-        [xScale(0 + xPosRef.current), yScale(-75)],
-        [xScale(-5 + xPosRef.current), yScale(-85)],
-        [xScale(5 + xPosRef.current), yScale(-85)]
-    ])
-    .map(([a, b]) => a.toString() + " " + b.toString())
-    .join(',');
-
-    // Game Loop
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const tickY =  0.7; // 1
-
-            updateLetters(prevLetters => {
-                let output = prevLetters;
-                let newGuess = currentGuess;
-                
-                // Check for collisions
-                for (const d of output) {
-                    if (
-                        d.x === xPosRef.current &&
-                        d.selected === false &&
-                        d.y - yPos >= 0 &&
-                        d.y - yPos < tickY
-                    ) {
-                        d.selected = true;
-                        newGuess += d.letter;
-                        updateGuess(newGuess);
-                    }
-                }
-
-                // If that completes a word, validate and reset currentWord
-                if (newGuess.length === letterCount) {
-                    updateHist(hist => ([...hist, log(newGuess, hist)]))
-                    updateGuess('')
-
-                }
-
-                // Move letters
-                output = output.map(letter => ({
-                    ...letter,
-                    y: letter.y - tickY,
-                }));
-
-                // Remove rows
-                output = output.filter(letter => letter.y >= -101);
-
-                // Replace removed rows
-                if (rowsInLetters(output) < rowsInLetters(prevLetters)) {
-                    output.push(...newRow(350));
-                }
-
-                return output;
-            });
-
-        }, 10);
-
-        return () => clearInterval(interval);
-    }, [currentGuess]);
-
-    // Keyboard
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (event.key === 'ArrowLeft') {
-                moveLeft();
-            } else if (event.key === 'ArrowRight') {
-                moveRight();
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
-
-    // swipe controls
-    const svgRef = useRef(null);
-    useEffect(() => {
-        const svg = svgRef.current;
-        let touchStartX = null;
-
-        const handleTouchStart = (e) => {
-            touchStartX = e.touches[0].clientX;
-        };
-
-        const handleTouchMove = (e) => {
-            if (!touchStartX) return;
-
-            const touchEndX = e.touches[0].clientX;
-            const touchDiffX = touchStartX - touchEndX;
-
-            if (touchDiffX > 30) {
-                moveLeft();
-                touchStartX = null; // Reset after handling swipe
-            } else if (touchDiffX < -30) {
-                moveRight();
-                touchStartX = null; // Reset after handling swipe
-            }
-        };
-
-        const handleTouchEnd = () => {
-            touchStartX = null; // Reset after touch ends
-        };
-
-        if (svg) {
-            svg.addEventListener('touchstart', handleTouchStart);
-            svg.addEventListener('touchmove', handleTouchMove);
-            svg.addEventListener('touchend', handleTouchEnd);
-        }
-
-        return () => {
-            if (svg) {
-                svg.removeEventListener('touchstart', handleTouchStart);
-                svg.removeEventListener('touchmove', handleTouchMove);
-                svg.removeEventListener('touchend', handleTouchEnd);
-            }
-        };
-    }, []);
-
-    return (
-        <div className='App'>
-            <div id='title'>Eggjam #23: Spell {letterCount}-letter Words</div>
-            <svg
-                ref={svgRef}
-                style={{ backgroundColor: '#D3D3D3' }}
-                height={height}
-                width={width}
-            >
-                <line x1={xScale(-60)} x2={xScale(-60)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-                <line x1={xScale(-30)} x2={xScale(-30)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-                <line x1={xScale(0)} x2={xScale(0)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-                <line x1={xScale(30)} x2={xScale(30)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-                <line x1={xScale(60)} x2={xScale(60)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-
-                {letters.map((d) => (
-                    <g key={d.index}>
-                        <circle
-                            cx={xScale(d.x)}
-                            cy={yScale(d.y)}
-                            stroke='black'
-                            fill='black'
-                            r='12'
-                        />
-                        <text
-                            x={xScale(d.x)}
-                            y={yScale(d.y)}
-                            fill='white'
-                            textAnchor='middle'
-                            dy="0.35em"
-                        >
-                            {d.letter}
-                        </text>
-                    </g>
-                ))}
-
-                <polygon points={getPolyPoints(xPos)} fill="white" stroke="black" />
-            </svg>
-            <div>{currentGuess}</div>
-            <div>{hist.map(x=><span className={`guess ${x.is_valid ? "right" : "wrong"}`}>{x.word}</span>)}</div>
+      />
+      <div className="grid-container">
+        <Grid
+          options={options}
+          currentGuess={currentGuess}
+          setGuess={setGuess}
+          wordSubmitted={wordSubmitted}
+          setWordSubmitted={setWordSubmitted}
+          submitWord={submitWord}
+          gameState={gameState}
+          last5Seconds={last5seconds}
+        />
+        <div
+          className="current-guess"
+          onClick={submitWord}
+        >
+          {currentGuess}
         </div>
-    );
+      </div>
+
+      {optionsModalOpen && (
+        <div className="modal" style={{ display: 'flex' }}>
+          <div className="modal-content" ref={optionsModalRef}>
+            <span className="close" onClick={() => setOptionsModalOpen(false)}>&times;</span>
+            <Options
+              options={options}
+              setOptions={handleSetOptions}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route
+          path="/:size/:freqIndex/:seed"
+          element={<Main />}
+        />
+
+<Route path="/eggjam" element={<Eggjam />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
