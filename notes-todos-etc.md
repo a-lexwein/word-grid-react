@@ -89,3 +89,18 @@ options for letter length and speed
 fix scoreboard props thing
 Blog post
 
+increase speed
+
+new game menu
+instructions
+word length
+speed
+
+
+names:
+
+Air n'Spelling
+
+
+Use arrow keys to move. Find as many {n}-letter words as you can. Start with {s} seconds. Each word found adds {x} seconds. Speed increases every {y} words found.
+

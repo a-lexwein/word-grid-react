@@ -16,6 +16,12 @@ export default function Eggjam() {
     const [last5seconds, setLast5Seconds] = useState(false);
     const [gameState, setGameState] = useState('in-game');
     const letterCount = 4;
+    const [tickY, setTickY] = useState(0.7);
+
+    const [optionsModalOpen, setOptionsModalOpen] = useState(false);
+    const optionsModalRef = useRef(null);
+
+    // const getScore = (hist) => Math.sum(...hist.map(x=>x.score))
 
     // Function to increment the timer by 5 seconds
     const addTime = (s) => {
@@ -54,9 +60,10 @@ export default function Eggjam() {
     const yScale = scaleLinear([100, -100], [0, height]);
 
     const getPolyPoints = () => ([
-        [xScale(0 + xPosRef.current), yScale(-75)],
-        [xScale(-5 + xPosRef.current), yScale(-85)],
-        [xScale(5 + xPosRef.current), yScale(-85)]
+        [xScale(2 + xPosRef.current), yScale(-75)],
+        [xScale(-2 + xPosRef.current), yScale(-75)],
+        [xScale(-7 + xPosRef.current), yScale(-90)],
+        [xScale(7 + xPosRef.current), yScale(-90)]
     ])
     .map(([a, b]) => a.toString() + " " + b.toString())
     .join(',');
@@ -85,7 +92,6 @@ export default function Eggjam() {
     useEffect(() => {
         if (gameState != 'in-game') return;
         const interval = setInterval(() => {
-            const tickY = 0.7;
 
             updateLetters(prevLetters => {
                 let output = prevLetters;
@@ -111,6 +117,7 @@ export default function Eggjam() {
                     // increment timer by length of word...revisit.
                     if(submission.score > 0) addTime(submission.word.length);
                     updateHist(hist => ([...hist, submission]));
+                    setTickY(oldVal => oldVal + submission.score * 0.08);
                     updateGuess('');
                 }
 
@@ -202,7 +209,7 @@ export default function Eggjam() {
             <div id='title'>Eggjam #23: Spell {letterCount}-letter Words</div>
             <svg
                 ref={svgRef}
-                style={{ backgroundColor: '#D3D3D3' }}
+                style={{ backgroundColor: '#bccaeb' }}
                 height={height}
                 width={width}
             >
@@ -217,23 +224,28 @@ export default function Eggjam() {
                         <circle
                             cx={xScale(d.x)}
                             cy={yScale(d.y)}
-                            stroke='black'
-                            fill='black'
-                            r='12'
+                            fill='#f0f4ff'
+                            r='15'
                         />
                         <text
                             x={xScale(d.x)}
                             y={yScale(d.y)}
-                            fill='white'
+                            fill='black'
                             textAnchor='middle'
                             dy="0.35em"
+                            fontSize="1.5em"
                         >
                             {d.letter}
                         </text>
                     </g>
                 ))}
 
-                <polygon points={getPolyPoints(xPos)} fill="white" stroke="black" />
+                <line x1={xScale(xPosRef.current) - 5} x2={xScale(xPosRef.current - 8)} y1={yScale(yPos - 8)} y2={yScale(yPos + 2)} style={{ stroke: 'black', strokeWidth: 2}}/>
+                <line x1={xScale(xPosRef.current) + 5} x2={xScale(xPosRef.current + 8)} y1={yScale(yPos - 8)} y2={yScale(yPos + 2)} style={{ stroke: 'black', strokeWidth: 2}}/>
+                <line x1={xScale(xPosRef.current) - 5} x2={xScale(xPosRef.current - 5)} y1={yScale(yPos - 15)} y2={yScale(yPos - 23)} style={{ stroke: 'black', strokeWidth: 2}}/>
+                <line x1={xScale(xPosRef.current) + 5} x2={xScale(xPosRef.current + 5)} y1={yScale(yPos - 15)} y2={yScale(yPos - 23)} style={{ stroke: 'black', strokeWidth: 2}}/>
+                <polygon points={getPolyPoints(xPos)} fill="#ce4040" stroke="black" />
+                <circle cx={xScale(xPosRef.current)} cy={yScale(yPos)} r="8" fill="#e5c348" stroke="black"/>
             </svg>
             <div>{currentGuess}</div>
             <Scoreboard
