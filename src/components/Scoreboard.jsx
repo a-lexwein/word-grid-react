@@ -30,7 +30,7 @@ export default function Scoreboard({ timer, history} ) {
 
     const histModal = (
         <ul>
-            {history.map(x=> <li>{x.word}</li>)}
+            {history.map((x,i)=> <li key={i}>{x.word}</li>)}
         </ul>
     )
 

@@ -105,7 +105,7 @@ export default function Eggjam() {
     // Game Loop for letters
     useEffect(() => {
         const interval = setInterval(() => {
-            if (gameState != 'in-game') return;
+            if (gameState != 'in-game') return () => clearInterval(interval);
 
             updateLetters(prevLetters => {
                 let output = prevLetters;
