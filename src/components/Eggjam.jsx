@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { newStartingLetters, newRow, rowsInLetters } from '../../helpers/eggjamHelpers';
 import wordInList from '../../helpers/wordInList';
-import { update } from 'lodash';
+import Scoreboard from './Scoreboard';
+const [gameState, setGameState] = useState('in-game');
 
 import './Eggjam.css'
 
@@ -15,13 +16,18 @@ export default function Eggjam() {
     const [currentGuess, updateGuess] = useState('');
     const [hist, updateHist] = useState([])
 
+    const [timer, setTimer] = useState(30);
+    const [last5seconds, setLast5Seconds] = useState(false);
+
     const letterCount = 4;
 
     const log = (word, hist) => {
         const output = {};
         output.word = word;
-        output.is_valid = wordInList(word);
+        output.valid = wordInList(word);
         output.used = hist.includes(word);
+        // 1 for new words, 0 for wrong words, 0 for reused words
+        output.score = wordInList(word) ? hist.includes(word) ? 0 : 1 : 0;
         return output;
     }
 
@@ -55,6 +61,24 @@ export default function Eggjam() {
     .join(',');
 
     // Game Loop
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setTimer((prevTimer) => {
+            if (prevTimer > 0) {
+              if (prevTimer <= 5) setLast5Seconds(true)
+              return prevTimer - 1;
+            } else {
+              clearInterval(interval);
+            //   setGameState('post-game');
+              return 0;
+            }
+          });
+        }, 1000);
+    
+        return () => clearInterval(interval);
+      }, []);
+
     useEffect(() => {
         const interval = setInterval(() => {
             const tickY =  0.7; // 1
@@ -206,7 +230,10 @@ export default function Eggjam() {
                 <polygon points={getPolyPoints(xPos)} fill="white" stroke="black" />
             </svg>
             <div>{currentGuess}</div>
-            <div>{hist.map(x=><span className={`guess ${x.is_valid ? "right" : "wrong"}`}>{x.word}</span>)}</div>
+            <Scoreboard
+                timer={timer}
+                history={hist}
+            />
         </div>
     );
 }

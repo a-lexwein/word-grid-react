@@ -77,3 +77,10 @@ indicate when a letter is selected
 
 check if word length = 5, add to score.
 tween movements
+
+add timer
+
+Scoring:
+Start with 30sec +X for each word
+
+Blog post
