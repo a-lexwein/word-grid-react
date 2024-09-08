@@ -60,10 +60,24 @@ export default function Eggjam() {
     const yScale = scaleLinear([100, -100], [0, height]);
 
     const getPolyPoints = () => ([
-        [xScale(2 + xPosRef.current), yScale(-75)],
-        [xScale(-2 + xPosRef.current), yScale(-75)],
-        [xScale(-7 + xPosRef.current), yScale(-90)],
-        [xScale(7 + xPosRef.current), yScale(-90)]
+        [xScale(-3 + xPosRef.current), yScale(yPos-8)],
+        [xScale(-25 + xPosRef.current), yScale(yPos-13)],
+        [xScale(-3 + xPosRef.current), yScale(yPos-13)],
+        [xScale(-3 + xPosRef.current), yScale(yPos-18)],
+        [xScale(-10 + xPosRef.current), yScale(yPos-23)],
+        [xScale(10 + xPosRef.current), yScale(yPos-23)],
+        [xScale(3 + xPosRef.current), yScale(yPos-18)],
+        [xScale(3 + xPosRef.current), yScale(yPos-13)],
+        [xScale(25 + xPosRef.current), yScale(yPos-13)],
+        [xScale(3 + xPosRef.current), yScale(yPos-8)],
+        [xScale(1 + xPosRef.current), yScale(yPos-3)],
+        [xScale(-1 + xPosRef.current), yScale(yPos-3)],
+        
+        
+        // [xScale(2 + xPosRef.current), yScale(-75)],
+        // [xScale(-2 + xPosRef.current), yScale(-75)],
+        // [xScale(-7 + xPosRef.current), yScale(-90)],
+        // [xScale(7 + xPosRef.current), yScale(-90)]
     ])
     .map(([a, b]) => a.toString() + " " + b.toString())
     .join(',');
@@ -207,6 +221,7 @@ export default function Eggjam() {
     return (
         <div className='App'>
             <div id='title'>Eggjam #23: Spell {letterCount}-letter Words</div>
+            <button>New Game</button>
             <svg
                 ref={svgRef}
                 style={{ backgroundColor: '#bccaeb' }}
@@ -239,19 +254,16 @@ export default function Eggjam() {
                         </text>
                     </g>
                 ))}
-
-                <line x1={xScale(xPosRef.current) - 5} x2={xScale(xPosRef.current - 8)} y1={yScale(yPos - 8)} y2={yScale(yPos + 2)} style={{ stroke: 'black', strokeWidth: 2}}/>
-                <line x1={xScale(xPosRef.current) + 5} x2={xScale(xPosRef.current + 8)} y1={yScale(yPos - 8)} y2={yScale(yPos + 2)} style={{ stroke: 'black', strokeWidth: 2}}/>
-                <line x1={xScale(xPosRef.current) - 5} x2={xScale(xPosRef.current - 5)} y1={yScale(yPos - 15)} y2={yScale(yPos - 23)} style={{ stroke: 'black', strokeWidth: 2}}/>
-                <line x1={xScale(xPosRef.current) + 5} x2={xScale(xPosRef.current + 5)} y1={yScale(yPos - 15)} y2={yScale(yPos - 23)} style={{ stroke: 'black', strokeWidth: 2}}/>
-                <polygon points={getPolyPoints(xPos)} fill="#ce4040" stroke="black" />
-                <circle cx={xScale(xPosRef.current)} cy={yScale(yPos)} r="8" fill="#e5c348" stroke="black"/>
+                <polygon points={getPolyPoints(xPos)} fill="#6a6b6c" stroke="black" />
             </svg>
             <div>{currentGuess}</div>
             <Scoreboard
                 timer={timer}
                 history={hist}
             />
+            <div>
+                Rules: Use arrow keys to move. Find as many 4-letter words as you can. Each word found adds time and increases speed.
+            </div>
         </div>
     );
 }
