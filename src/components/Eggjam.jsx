@@ -3,10 +3,7 @@ import { scaleLinear } from 'd3-scale';
 import { newStartingLetters, newRow, rowsInLetters } from '../../helpers/eggjamHelpers';
 import wordInList from '../../helpers/wordInList';
 import Scoreboard from './Scoreboard';
-const [gameState, setGameState] = useState('in-game');
-
-import './Eggjam.css'
-
+import './Eggjam.css';
 
 export default function Eggjam() {
     const [xPos, setX] = useState(0);
@@ -14,22 +11,26 @@ export default function Eggjam() {
     const [yPos, setY] = useState(-75);
     const [letters, updateLetters] = useState(() => newStartingLetters(11));
     const [currentGuess, updateGuess] = useState('');
-    const [hist, updateHist] = useState([])
-
-    const [timer, setTimer] = useState(30);
+    const [hist, updateHist] = useState([]);
+    const [timer, setTimer] = useState(45);
     const [last5seconds, setLast5Seconds] = useState(false);
-
+    const [gameState, setGameState] = useState('in-game');
     const letterCount = 4;
 
+    // Function to increment the timer by 5 seconds
+    const addTime = (s) => {
+        setTimer(prevTimer => prevTimer + s);
+    };
+
     const log = (word, hist) => {
-        const output = {};
-        output.word = word;
-        output.valid = wordInList(word);
-        output.used = hist.includes(word);
-        // 1 for new words, 0 for wrong words, 0 for reused words
-        output.score = wordInList(word) ? hist.includes(word) ? 0 : 1 : 0;
+        const output = {
+            word,
+            valid: wordInList(word),
+            used: hist.some(h => h.word === word),
+            score: wordInList(word) && !hist.some(h => h.word === word) ? 1 : 0
+        };
         return output;
-    }
+    };
 
     const moveLeft = () => {
         setX(prevXpos => {
@@ -60,33 +61,36 @@ export default function Eggjam() {
     .map(([a, b]) => a.toString() + " " + b.toString())
     .join(',');
 
-    // Game Loop
-
+    // Game Loop for timer
     useEffect(() => {
         const interval = setInterval(() => {
-          setTimer((prevTimer) => {
-            if (prevTimer > 0) {
-              if (prevTimer <= 5) setLast5Seconds(true)
-              return prevTimer - 1;
-            } else {
-              clearInterval(interval);
-            //   setGameState('post-game');
-              return 0;
-            }
-          });
+            
+            setTimer(prevTimer => {
+                if (prevTimer > 0) {
+                    if (prevTimer <= 5) setLast5Seconds(true);
+                    return prevTimer - 1;
+                } else {
+                    
+                    clearInterval(interval);
+                    setGameState('post-game');
+                    return 0;
+                }
+            });
         }, 1000);
-    
-        return () => clearInterval(interval);
-      }, []);
 
+        return () => clearInterval(interval);
+    }, []);
+
+    // Game Loop for letters
     useEffect(() => {
+        if (gameState != 'in-game') return;
         const interval = setInterval(() => {
-            const tickY =  0.7; // 1
+            const tickY = 0.7;
 
             updateLetters(prevLetters => {
                 let output = prevLetters;
                 let newGuess = currentGuess;
-                
+
                 // Check for collisions
                 for (const d of output) {
                     if (
@@ -103,9 +107,11 @@ export default function Eggjam() {
 
                 // If that completes a word, validate and reset currentWord
                 if (newGuess.length === letterCount) {
-                    updateHist(hist => ([...hist, log(newGuess, hist)]))
-                    updateGuess('')
-
+                    let submission = log(newGuess, hist);
+                    // increment timer by length of word...revisit.
+                    if(submission.score > 0) addTime(submission.word.length);
+                    updateHist(hist => ([...hist, submission]));
+                    updateGuess('');
                 }
 
                 // Move letters

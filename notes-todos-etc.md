@@ -78,9 +78,12 @@ indicate when a letter is selected
 check if word length = 5, add to score.
 tween movements
 
-add timer
+add timer x
 
 Scoring:
 Start with 30sec +X for each word
+stop game at 0s
+options for letter length and speed
 
+fix scoreboard props thing
 Blog post
