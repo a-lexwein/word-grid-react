@@ -16,6 +16,12 @@ export default function Eggjam() {
     const [last5seconds, setLast5Seconds] = useState(false);
     const [gameState, setGameState] = useState('in-game');
     const letterCount = 4;
+    const [tickY, setTickY] = useState(0.7);
+
+    const [optionsModalOpen, setOptionsModalOpen] = useState(false);
+    const optionsModalRef = useRef(null);
+
+    // const getScore = (hist) => Math.sum(...hist.map(x=>x.score))
 
     // Function to increment the timer by 5 seconds
     const addTime = (s) => {
@@ -54,9 +60,24 @@ export default function Eggjam() {
     const yScale = scaleLinear([100, -100], [0, height]);
 
     const getPolyPoints = () => ([
-        [xScale(0 + xPosRef.current), yScale(-75)],
-        [xScale(-5 + xPosRef.current), yScale(-85)],
-        [xScale(5 + xPosRef.current), yScale(-85)]
+        [xScale(-3 + xPosRef.current), yScale(yPos-8)],
+        [xScale(-25 + xPosRef.current), yScale(yPos-13)],
+        [xScale(-3 + xPosRef.current), yScale(yPos-13)],
+        [xScale(-3 + xPosRef.current), yScale(yPos-18)],
+        [xScale(-10 + xPosRef.current), yScale(yPos-23)],
+        [xScale(10 + xPosRef.current), yScale(yPos-23)],
+        [xScale(3 + xPosRef.current), yScale(yPos-18)],
+        [xScale(3 + xPosRef.current), yScale(yPos-13)],
+        [xScale(25 + xPosRef.current), yScale(yPos-13)],
+        [xScale(3 + xPosRef.current), yScale(yPos-8)],
+        [xScale(1 + xPosRef.current), yScale(yPos-3)],
+        [xScale(-1 + xPosRef.current), yScale(yPos-3)],
+        
+        
+        // [xScale(2 + xPosRef.current), yScale(-75)],
+        // [xScale(-2 + xPosRef.current), yScale(-75)],
+        // [xScale(-7 + xPosRef.current), yScale(-90)],
+        // [xScale(7 + xPosRef.current), yScale(-90)]
     ])
     .map(([a, b]) => a.toString() + " " + b.toString())
     .join(',');
@@ -85,7 +106,6 @@ export default function Eggjam() {
     useEffect(() => {
         if (gameState != 'in-game') return;
         const interval = setInterval(() => {
-            const tickY = 0.7;
 
             updateLetters(prevLetters => {
                 let output = prevLetters;
@@ -111,6 +131,7 @@ export default function Eggjam() {
                     // increment timer by length of word...revisit.
                     if(submission.score > 0) addTime(submission.word.length);
                     updateHist(hist => ([...hist, submission]));
+                    setTickY(oldVal => oldVal + submission.score * 0.08);
                     updateGuess('');
                 }
 
@@ -200,9 +221,10 @@ export default function Eggjam() {
     return (
         <div className='App'>
             <div id='title'>Eggjam #23: Spell {letterCount}-letter Words</div>
+            <button>New Game</button>
             <svg
                 ref={svgRef}
-                style={{ backgroundColor: '#D3D3D3' }}
+                style={{ backgroundColor: '#bccaeb' }}
                 height={height}
                 width={width}
             >
@@ -217,29 +239,31 @@ export default function Eggjam() {
                         <circle
                             cx={xScale(d.x)}
                             cy={yScale(d.y)}
-                            stroke='black'
-                            fill='black'
-                            r='12'
+                            fill='#f0f4ff'
+                            r='15'
                         />
                         <text
                             x={xScale(d.x)}
                             y={yScale(d.y)}
-                            fill='white'
+                            fill='black'
                             textAnchor='middle'
                             dy="0.35em"
+                            fontSize="1.5em"
                         >
                             {d.letter}
                         </text>
                     </g>
                 ))}
-
-                <polygon points={getPolyPoints(xPos)} fill="white" stroke="black" />
+                <polygon points={getPolyPoints(xPos)} fill="#6a6b6c" stroke="black" />
             </svg>
             <div>{currentGuess}</div>
             <Scoreboard
                 timer={timer}
                 history={hist}
             />
+            <div>
+                Rules: Use arrow keys to move. Find as many 4-letter words as you can. Each word found adds time and increases speed.
+            </div>
         </div>
     );
 }
