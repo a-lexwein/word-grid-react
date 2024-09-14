@@ -351,7 +351,6 @@ export default function Eggjam() {
         <div className='App'>
             <div id='title'>Eggjam #23: Air n' Spelling</div>
             { gameState === 'in-game' ? gameSVG : menuSVG}
-            <div>{currentGuess}</div>
             <Scoreboard
                 timer={timer}
                 history={hist}
