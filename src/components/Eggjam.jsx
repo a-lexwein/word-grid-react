@@ -16,10 +16,21 @@ export default function Eggjam() {
     const [last5seconds, setLast5Seconds] = useState(false);
     const [gameState, setGameState] = useState('post-game');
     const [letterCount, setLetterCount] = useState(4);
-    const [tickY, setTickY] = useState(0.7);
+    const [tickY, setTickY] = useState(0.6);
+    const [endGameMessage, setEndGameMessage] = useState('')
 
     const [optionsModalOpen, setOptionsModalOpen] = useState(false);
     const optionsModalRef = useRef(null);
+
+    const displayCurrentGuess = () => {
+        let output = currentGuess;
+        while (output.length < letterCount) {
+            output += '_'
+        }
+        return output
+            .split('')
+            .join(' ')
+    }
 
     // const getScore = (hist) => Math.sum(...hist.map(x=>x.score))
 
@@ -255,6 +266,18 @@ export default function Eggjam() {
             </g>
         ))}
         <polygon points={getPolyPoints(xPos)} fill="#6a6b6c" stroke="black" />
+
+        <rect
+                x={0}
+                width={width}
+                y={0}
+                height={height/9}
+                fill="gray"
+
+            />
+        <text x={xScale(-60)} y={height/12} fill='black' fontSize="2em">
+            {displayCurrentGuess()}
+        </text>
     </svg>
 
     const menuButton = (x,y, text, callback) => {
@@ -286,19 +309,19 @@ export default function Eggjam() {
         height={height}
         width={width}
         >
-            <text x={xScale(-90)} y={yScale(65)}>Word Length:</text>
-            {menuButton(-60,50, '3', () => setLetterCount(3))}
-            {menuButton(-30,50, '4', () => setLetterCount(4))}
-            {menuButton(0,50, '5', () => setLetterCount(5))}
-            {menuButton(30,50, '6', () => setLetterCount(6))}
-            {menuButton(60,50, '7', () => setLetterCount(7))}
+            <text x={xScale(-90)} y={yScale(55)}>Word Length: {letterCount}</text>
+            {menuButton(-60,40, '3', () => setLetterCount(3))}
+            {menuButton(-30,40, '4', () => setLetterCount(4))}
+            {menuButton(0,40, '5', () => setLetterCount(5))}
+            {menuButton(30,40, '6', () => setLetterCount(6))}
+            {menuButton(60,40, '7', () => setLetterCount(7))}
 
-            <text x={xScale(-90)} y={yScale(25)}>Speed:</text>
-            {menuButton(-60,15, '1', () => setTickY(0.7))}
-            {menuButton(-30,15, '2', () => setTickY(1.1))}
-            {menuButton(0,15, '3', () => setTickY(1.5))}
-            {menuButton(30,15, '4', () => setTickY(2))}
-            {menuButton(60,15, '🤢', () => console.log('hello'))}
+            <text x={xScale(-90)} y={yScale(15)}>Speed: {tickY}</text>
+            {menuButton(-60,5, '1', () => setTickY(0.6))}
+            {menuButton(-30,5, '2', () => setTickY(1))}
+            {menuButton(0,5, '3', () => setTickY(1.4))}
+            {menuButton(30,5, '🤢', () => setTickY(2))}
+            {menuButton(60,5, '🤮', () => setTickY(2.5))}
             <g
                 onClick={handleNewGame}
             >
@@ -313,7 +336,6 @@ export default function Eggjam() {
             <text
                 x={xScale(-40)}
                 y={yScale(-34)}
-                fill='black'
                 // textAnchor='middle'
                 // dy="0.35em"
                 fontSize="1.5em"
@@ -335,8 +357,7 @@ export default function Eggjam() {
                 history={hist}
             />
             <div>
-                {tickY} 
-                Rules: Use arrow keys to move. Find as many 4-letter words as you can before the timer reaches zero. Each word found adds time and increases speed.
+                Rules: Use arrow keys to move. Find as many {letterCount}-letter words as you can before the timer reaches zero. Each word found adds time.
             </div>
         </div>
     );
