@@ -89,7 +89,6 @@ options for letter length and speed
 fix scoreboard props thing
 Blog post
 
-increase speed
 
 new game menu
 instructions
@@ -104,8 +103,3 @@ Air n'Spelling
 
 Use arrow keys to move. Find as many {n}-letter words as you can. Start with {s} seconds. Each word found adds {x} seconds. Speed increases every {y} words found.
 
-<line x1={xScale(xPosRef.current) - 5} x2={xScale(xPosRef.current - 8)} y1={yScale(yPos - 8)} y2={yScale(yPos + 2)} style={{ stroke: 'black', strokeWidth: 2}}/>
-                <line x1={xScale(xPosRef.current) + 5} x2={xScale(xPosRef.current + 8)} y1={yScale(yPos - 8)} y2={yScale(yPos + 2)} style={{ stroke: 'black', strokeWidth: 2}}/>
-                <line x1={xScale(xPosRef.current) - 5} x2={xScale(xPosRef.current - 5)} y1={yScale(yPos - 15)} y2={yScale(yPos - 23)} style={{ stroke: 'black', strokeWidth: 2}}/>
-                <line x1={xScale(xPosRef.current) + 5} x2={xScale(xPosRef.current + 5)} y1={yScale(yPos - 15)} y2={yScale(yPos - 23)} style={{ stroke: 'black', strokeWidth: 2}}/>
-                <circle cx={xScale(xPosRef.current)} cy={yScale(yPos)} r="8" fill="#e5c348" stroke="black"/>
