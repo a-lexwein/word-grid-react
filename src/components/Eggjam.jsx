@@ -12,10 +12,10 @@ export default function Eggjam() {
     const [letters, updateLetters] = useState(() => newStartingLetters(11));
     const [currentGuess, updateGuess] = useState('');
     const [hist, updateHist] = useState([]);
-    const [timer, setTimer] = useState(45);
+    const [timer, setTimer] = useState(15);
     const [last5seconds, setLast5Seconds] = useState(false);
-    const [gameState, setGameState] = useState('in-game');
-    const letterCount = 4;
+    const [gameState, setGameState] = useState('post-game');
+    const [letterCount, setLetterCount] = useState(4);
     const [tickY, setTickY] = useState(0.7);
 
     const [optionsModalOpen, setOptionsModalOpen] = useState(false);
@@ -73,11 +73,6 @@ export default function Eggjam() {
         [xScale(1 + xPosRef.current), yScale(yPos-3)],
         [xScale(-1 + xPosRef.current), yScale(yPos-3)],
         
-        
-        // [xScale(2 + xPosRef.current), yScale(-75)],
-        // [xScale(-2 + xPosRef.current), yScale(-75)],
-        // [xScale(-7 + xPosRef.current), yScale(-90)],
-        // [xScale(7 + xPosRef.current), yScale(-90)]
     ])
     .map(([a, b]) => a.toString() + " " + b.toString())
     .join(',');
@@ -92,7 +87,7 @@ export default function Eggjam() {
                     return prevTimer - 1;
                 } else {
                     
-                    clearInterval(interval);
+                    // clearInterval(interval);
                     setGameState('post-game');
                     return 0;
                 }
@@ -105,7 +100,7 @@ export default function Eggjam() {
     // Game Loop for letters
     useEffect(() => {
         const interval = setInterval(() => {
-            if (gameState != 'in-game') return () => clearInterval(interval);
+            if (gameState != 'in-game') return;
 
             updateLetters(prevLetters => {
                 let output = prevLetters;
@@ -131,7 +126,7 @@ export default function Eggjam() {
                     // increment timer by length of word...revisit.
                     if(submission.score > 0) addTime(submission.word.length);
                     updateHist(hist => ([...hist, submission]));
-                    setTickY(oldVal => oldVal + submission.score * 0.08);
+                    // setTickY(oldVal => oldVal + submission.score * 0.08);
                     updateGuess('');
                 }
 
@@ -155,7 +150,7 @@ export default function Eggjam() {
         }, 10);
 
         return () => clearInterval(interval);
-    }, [currentGuess]);
+    }, [currentGuess, gameState]); // don't think I need gameState here.
 
     // Keyboard
     useEffect(() => {
@@ -222,54 +217,125 @@ export default function Eggjam() {
         updateHist([]);
         updateGuess('');
         setTimer(45);
-        setTickY(0.7);
+        // setTickY(0.7);
+        updateLetters(newStartingLetters(11));
         setGameState('in-game');
     };
+
+    const gameSVG = <svg
+        ref={svgRef}
+        style={{ backgroundColor: '#bccaeb' }}
+        height={height}
+        width={width}
+    >
+        <line x1={xScale(-60)} x2={xScale(-60)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
+        <line x1={xScale(-30)} x2={xScale(-30)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
+        <line x1={xScale(0)} x2={xScale(0)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
+        <line x1={xScale(30)} x2={xScale(30)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
+        <line x1={xScale(60)} x2={xScale(60)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
+
+        {letters.map((d) => (
+            <g key={d.index}>
+                <circle
+                    cx={xScale(d.x)}
+                    cy={yScale(d.y)}
+                    fill='#f0f4ff'
+                    r='15'
+                />
+                <text
+                    x={xScale(d.x)}
+                    y={yScale(d.y)}
+                    fill='black'
+                    textAnchor='middle'
+                    dy="0.35em"
+                    fontSize="1.5em"
+                >
+                    {d.letter}
+                </text>
+            </g>
+        ))}
+        <polygon points={getPolyPoints(xPos)} fill="#6a6b6c" stroke="black" />
+    </svg>
+
+    const menuButton = (x,y, text, callback) => {
+    return <g
+        onClick={callback}
+        >
+            <circle
+                cx={xScale(x)}
+                cy={yScale(y)}
+                fill='#f0f4ff'
+                r='15'
+            />
+            <text
+                x={xScale(x)}
+                y={yScale(y)}
+                fill='black'
+                textAnchor='middle'
+                dy="0.35em"
+                fontSize="1.5em"
+            >
+                {text}
+            </text>
+        </g>   
+    }
+
+    const menuSVG = <svg
+        ref={svgRef}
+        style={{ backgroundColor: '#bccaeb' }}
+        height={height}
+        width={width}
+        >
+            <text x={xScale(-90)} y={yScale(65)}>Word Length:</text>
+            {menuButton(-60,50, '3', () => setLetterCount(3))}
+            {menuButton(-30,50, '4', () => setLetterCount(4))}
+            {menuButton(0,50, '5', () => setLetterCount(5))}
+            {menuButton(30,50, '6', () => setLetterCount(6))}
+            {menuButton(60,50, '7', () => setLetterCount(7))}
+
+            <text x={xScale(-90)} y={yScale(25)}>Speed:</text>
+            {menuButton(-60,15, '1', () => setTickY(0.7))}
+            {menuButton(-30,15, '2', () => setTickY(1.1))}
+            {menuButton(0,15, '3', () => setTickY(1.5))}
+            {menuButton(30,15, '4', () => setTickY(2))}
+            {menuButton(60,15, '🤢', () => console.log('hello'))}
+            <g
+                onClick={handleNewGame}
+            >
+            <rect
+                x={xScale(-50)}
+                width={width/2}
+                y={yScale(-20)}
+                height={height/10}
+                fill="blue"
+                rx="15"
+            />
+            <text
+                x={xScale(-40)}
+                y={yScale(-34)}
+                fill='black'
+                // textAnchor='middle'
+                // dy="0.35em"
+                fontSize="1.5em"
+                fill = "white"
+            >New Game</text>
+            </g>
+
+        <polygon points={getPolyPoints(xPos)} fill="#6a6b6c" stroke="black" />
+    </svg>
+
 
     return (
         <div className='App'>
             <div id='title'>Eggjam #23: Air n' Spelling</div>
-            <button onClick={handleNewGame}>New Game</button>
-            <svg
-                ref={svgRef}
-                style={{ backgroundColor: '#bccaeb' }}
-                height={height}
-                width={width}
-            >
-                <line x1={xScale(-60)} x2={xScale(-60)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-                <line x1={xScale(-30)} x2={xScale(-30)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-                <line x1={xScale(0)} x2={xScale(0)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-                <line x1={xScale(30)} x2={xScale(30)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-                <line x1={xScale(60)} x2={xScale(60)} y1={yScale(-100)} y2={yScale(100)} style={{ stroke: 'darkgray', strokeWidth: 2 }} />
-
-                {letters.map((d) => (
-                    <g key={d.index}>
-                        <circle
-                            cx={xScale(d.x)}
-                            cy={yScale(d.y)}
-                            fill='#f0f4ff'
-                            r='15'
-                        />
-                        <text
-                            x={xScale(d.x)}
-                            y={yScale(d.y)}
-                            fill='black'
-                            textAnchor='middle'
-                            dy="0.35em"
-                            fontSize="1.5em"
-                        >
-                            {d.letter}
-                        </text>
-                    </g>
-                ))}
-                <polygon points={getPolyPoints(xPos)} fill="#6a6b6c" stroke="black" />
-            </svg>
+            { gameState === 'in-game' ? gameSVG : menuSVG}
             <div>{currentGuess}</div>
             <Scoreboard
                 timer={timer}
                 history={hist}
             />
             <div>
+                {tickY} 
                 Rules: Use arrow keys to move. Find as many 4-letter words as you can before the timer reaches zero. Each word found adds time and increases speed.
             </div>
         </div>
