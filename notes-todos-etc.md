@@ -72,28 +72,23 @@ Fixed this issue above
 # Eggjam 23
 
 indicate when a letter is selected
+tween movements
 
-5 letter version:
 
 check if word length = 5, add to score.
 
-tween movements
 
 add timer x
 
-Scoring:
-Start with 30sec +X for each word
-stop game at 0s
-options for letter length and speed
 
-fix scoreboard props thing
+fix scoreboard props thing x
 Blog post
 
 
-new game menu
-instructions
-word length
-speed
+new game menu x
+instructions x
+word length x
+speed x
 
 Air n'Spelling
 
@@ -119,8 +114,4 @@ In Orta's constructor notes for the puzzle
 
 Air n' Spelling 
 
-Show timer, score, last word found
-
-scoring emoji:
-    1. bullseye
-    1.
+Show timer x, score x, last word found x

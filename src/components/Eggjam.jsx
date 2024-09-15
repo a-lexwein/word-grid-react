@@ -7,7 +7,7 @@ import './Eggjam.css';
 
 export default function Eggjam() {
     const [xPos, setX] = useState(0);
-    const xPosRef = useRef(xPos); // Ref to hold the current xPos
+    const xPosRef = useRef(xPos);
     const [yPos, setY] = useState(-75);
     const [letters, updateLetters] = useState(() => newStartingLetters(11));
     const [currentGuess, updateGuess] = useState('');
@@ -18,10 +18,8 @@ export default function Eggjam() {
     const [letterCount, setLetterCount] = useState(4);
     const [tickY, setTickY] = useState(0.6);
     const [endGameMessage, setEndGameMessage] = useState('')
+    const [gameOverMessage, setGameOverMessage] = useState('')
     const [gameHasBeenStarted, setGameHasBeenStarted] = useState(false)
-
-    const [optionsModalOpen, setOptionsModalOpen] = useState(false);
-    const optionsModalRef = useRef(null);
 
     const displayCurrentGuess = () => {
         let output = currentGuess;
@@ -33,22 +31,30 @@ export default function Eggjam() {
             .join(' ')
     }
 
-    // const getScore = (hist) => Math.sum(...hist.map(x=>x.score))
-
-    // Function to increment the timer by 5 seconds
-    const addTime = (wordLength) => {
-        let bonusMap = {
-            3: 1,
-            4: 3,
-            5: 5,
-            6: 8,
-            7: 11,
+    const displayLastGuess = () => {
+        if(hist.length === 0) {
+            return Array(letterCount).fill("_")
+                .join(' ')
         }
-        
-        // [
-        //  [3,4,5,6,7],
-        //  [1,3,5,8,10]
-        // ]
+        return hist[hist.length - 1].word
+    }
+    const bonusMap = {
+        3: 1,
+        4: 3,
+        5: 5,
+        6: 9,
+        7: 13,
+    }
+
+    const displayLastScore = () => {
+        if(hist.length === 0) return ''
+        if(!hist[hist.length - 1].valid) return 'is not a word'
+        if(hist[hist.length - 1].used) return 'was already used'
+        return '✔ +' + hist[hist.length - 1].score * bonusMap[letterCount] + 's'
+    }
+
+
+    const addTime = (wordLength) => {
         setTimer(prevTimer => prevTimer + bonusMap[wordLength]);
     };
 
@@ -79,7 +85,7 @@ export default function Eggjam() {
     };
 
     const width = 300;
-    const height = 500;
+    const height = 570;
     const xScale = scaleLinear([-100, 100], [0, width]);
     const yScale = scaleLinear([100, -100], [0, height]);
 
@@ -113,7 +119,8 @@ export default function Eggjam() {
                     
                     // clearInterval(interval);
                     setGameState('post-game');
-                    setEndGameMessage(gameHasBeenStarted ? `You scored ${hist.map(x => x.score).reduce((x,y) => x + y, 0)} points` :'');
+                    if(gameHasBeenStarted) setEndGameMessage(`🌟You found ${hist.map(x => x.score).reduce((x,y) => x + y, 0)} words.🌟`);
+                    if(gameHasBeenStarted) setGameOverMessage('Game Over.');
                     
                     return 0;
                 }
@@ -294,11 +301,14 @@ export default function Eggjam() {
                 x={0}
                 width={width}
                 y={0}
-                height={height/9}
+                height={height/7}
                 fill="gray"
 
             />
-        <text x={xScale(-40)} y={height/12} fill='black' fontSize="2em">
+        <text x={xScale(-40)} y={yScale(92)} fill='black' fontSize="1.3em">
+            {displayLastGuess()} {displayLastScore()}
+        </text>
+        <text x={xScale(-40)} y={yScale(77)} fill='black' fontSize="2em">
             {displayCurrentGuess()}
         </text>
         <text x={xScale(-90)} y={yScale(92)} fill='black' fontSize="1.3em">
@@ -346,6 +356,15 @@ export default function Eggjam() {
         height={height}
         width={width}
         >
+            <text
+                x={xScale(0)}
+                y={yScale(80)}
+                textAnchor='middle'
+                dy="0.35em"
+                fontSize="1.5em"
+                fill = "#6d6755"
+            >{gameOverMessage}</text>
+
             <text x={xScale(-90)} y={yScale(55)} style={{fontSize: "1.2em"}}>Word Length: {letterCount}</text>
             {menuButton(-60,40, '3', () => setLetterCount(3))}
             {menuButton(-30,40, '4', () => setLetterCount(4))}
@@ -396,9 +415,9 @@ export default function Eggjam() {
     return (
         <div className='App'>
             <div id='title'>Eggjam #23: Air n' Spelling</div>
-            { gameState === 'in-game' ? gameSVG : menuSVG}
+            { gameState === 'in-game' ? gameSVG : menuSVG }
             <div>
-                Rules: Use arrow keys to move. Find {letterCount}-letter words to increase the timer.
+                Use ← → keys to move. Find {letterCount}-letter words to increase the timer.
             </div>
         </div>
     );
