@@ -95,11 +95,32 @@ instructions
 word length
 speed
 
-
-names:
-
 Air n'Spelling
 
 
-Use arrow keys to move. Find as many {n}-letter words as you can. Start with {s} seconds. Each word found adds {x} seconds. Speed increases every {y} words found.
+## blog post
 
+Orta/Zach
+
+Puzzmo
+https://puzzmo.com/play/crossword/pp16xw20fg/share
+Menus vs Parkour
+https://www.reddit.com/r/okbuddyrosalyn/comments/1cd83y8/menus_and_parkour/
+
+Boggle is Parkour
+
+sharp, nimble, quick: these are parkour adjectives
+
+Co-authored by Orta Therox and Brooke Husic, Puzzmo Crossword #319 was titled "Pick A Side". It was video game themed puzzle that references an April 2024 reddit post by @imGhostKitty which asserts (by replacing the word bubbles in a Calvin and Hobbes 4-panel comic) that "The two types of games are menus and parkour".
+
+I disagree with imGhostKitty's
+
+In Orta's constructor notes for the puzzle
+
+Air n' Spelling 
+
+Show timer, score, last word found
+
+scoring emoji:
+    1. bullseye
+    1.
