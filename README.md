@@ -1,8 +1,13 @@
 # B.O.G.G. Basic Orthographic Grid Game
 
+A web-based game, inspired (very, very heavily inspired) by the classic 1972 word game Boggle. It also
 
+The game is currently playable at https://alexs-word-game.vercel.app/
 
-# Readme from template: GitHub Codespaces ♥️ React
+There website also a second game called Air N' Spelling that was made for a game jam associated with the podcast *Eggplant*: https://alexs-word-game.vercel.app/eggjam23
+
+Forked from this repo set-up 
+## Readme from template: GitHub Codespaces ♥️ React
 
 
 ## Available Scripts
